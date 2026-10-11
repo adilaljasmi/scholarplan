@@ -505,22 +505,28 @@ function notesBySlide() {
   });
   s.addText("“Let the LLM supply judgement; let code guarantee validity and termination.”", { x: 0.6, y: 4.85, w: 5.9, h: 0.9, fontSize: 18, italic: true, color: THEME.colors.accent2, fontFace: "Cambria", margin: 0, isTextBox: true });
   s.addText("github.com/adilaljasmi/scholarplan · code · tests · evidence · README", { x: 0.6, y: 5.9, w: 5.9, h: 0.35, fontSize: 12, color: "94A3B8", margin: 0, isTextBox: true });
+  // Full Harvard (UoEO / Cite Them Right) entries: [before italic, italic, after italic].
   const refs = [
-    "Guo, T. et al. (2024) 'Large language model based multi-agents: a survey of progress and challenges', IJCAI-24, pp. 8048–8057.",
-    "Hayes-Roth, B. (1985) 'A blackboard architecture for control', Artificial Intelligence, 26(3), pp. 251–321.",
-    "Ji, Z. et al. (2023) 'Survey of hallucination in natural language generation', ACM Computing Surveys, 55(12), pp. 1–38.",
-    "Kambhampati, S. et al. (2024) 'Position: LLMs can't plan, but can help planning in LLM-Modulo frameworks', ICML 2024. PMLR 235.",
-    "Salemi, A. et al. (2025) 'LLM-based multi-agent blackboard system for information discovery in data science', arXiv:2510.01285.",
-    "Shinn, N. et al. (2023) 'Reflexion: language agents with verbal reinforcement learning', NeurIPS 36.",
-    "Wooldridge, M. (2009) An Introduction to MultiAgent Systems. 2nd edn. Chichester: Wiley.",
-    "Wooldridge, M., Jennings, N.R. and Kinny, D. (2000) 'The Gaia methodology for agent-oriented analysis and design', AAMAS, 3(3), pp. 285–312.",
-    "Yao, S. et al. (2023) 'ReAct: synergizing reasoning and acting in language models', ICLR 2023.",
+    ["Guo, T. et al. (2024) 'Large language model based multi-agents: a survey of progress and challenges', in ", "Proceedings of IJCAI-24", ", pp. 8048–8057. Available at: https://doi.org/10.24963/ijcai.2024/890 (Accessed: 11 October 2026)."],
+    ["Hayes-Roth, B. (1985) 'A blackboard architecture for control', ", "Artificial Intelligence", ", 26(3), pp. 251–321. Available at: https://doi.org/10.1016/0004-3702(85)90063-3 (Accessed: 11 October 2026)."],
+    ["Ji, Z. et al. (2023) 'Survey of hallucination in natural language generation', ", "ACM Computing Surveys", ", 55(12), pp. 1–38. Available at: https://doi.org/10.1145/3571730 (Accessed: 11 October 2026)."],
+    ["Kambhampati, S. et al. (2024) 'Position: LLMs can't plan, but can help planning in LLM-Modulo frameworks', in ", "Proceedings of ICML 2024", ". Vienna: PMLR 235. Available at: https://arxiv.org/abs/2402.01817 (Accessed: 11 October 2026)."],
+    ["Salemi, A. et al. (2025) 'LLM-based multi-agent blackboard system for information discovery in data science', ", "arXiv preprint", " arXiv:2510.01285. Available at: https://arxiv.org/abs/2510.01285 (Accessed: 11 October 2026)."],
+    ["Shinn, N. et al. (2023) 'Reflexion: language agents with verbal reinforcement learning', in ", "Advances in Neural Information Processing Systems 36", ". Available at: https://arxiv.org/abs/2303.11366 (Accessed: 11 October 2026)."],
+    ["Wooldridge, M. (2009) ", "An Introduction to MultiAgent Systems", ". 2nd edn. Chichester: John Wiley & Sons."],
+    ["Wooldridge, M., Jennings, N.R. and Kinny, D. (2000) 'The Gaia methodology for agent-oriented analysis and design', ", "Autonomous Agents and Multi-Agent Systems", ", 3(3), pp. 285–312. Available at: https://doi.org/10.1023/A:1010071910869 (Accessed: 11 October 2026)."],
+    ["Yao, S. et al. (2023) 'ReAct: synergizing reasoning and acting in language models', in ", "Proceedings of ICLR 2023", ". Available at: https://arxiv.org/abs/2210.03629 (Accessed: 11 October 2026)."],
   ];
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 6.9, y: 1.35, w: 5.85, h: 4.6, rectRadius: 0.08, fill: { color: "1E293B" }, line: { color: "334155" } });
-  s.addText("References", { x: 7.1, y: 1.45, w: 5.5, h: 0.4, fontSize: 15, bold: true, color: "FFFFFF", margin: 0, isTextBox: true });
-  s.addText(refs.map((r, i) => ({ text: r, options: { breakLine: i < refs.length - 1, paraSpaceAfter: 4 } })),
-    { x: 7.1, y: 1.9, w: 5.5, h: 3.95, fontSize: 10.5, color: "CBD5E1", valign: "top", margin: 0, isTextBox: true });
-  s.addText("Full Harvard reference list with DOIs and access dates: README §13", { x: 6.9, y: 6.05, w: 5.85, h: 0.3, fontSize: 10, italic: true, color: "94A3B8", margin: 0, isTextBox: true });
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 6.9, y: 1.3, w: 5.85, h: 5.3, rectRadius: 0.08, fill: { color: "1E293B" }, line: { color: "334155" } });
+  s.addText("References", { x: 7.1, y: 1.38, w: 5.5, h: 0.36, fontSize: 15, bold: true, color: "FFFFFF", margin: 0, isTextBox: true });
+  const refRuns = [];
+  refs.forEach(([a, b, c], i) => {
+    refRuns.push({ text: a, options: {} });
+    refRuns.push({ text: b, options: { italic: true } });
+    refRuns.push({ text: c, options: { breakLine: i < refs.length - 1, paraSpaceAfter: 3 } });
+  });
+  s.addText(refRuns, { x: 7.1, y: 1.78, w: 5.5, h: 4.75, fontSize: 10, color: "CBD5E1", valign: "top", margin: 0, paraSpaceAfter: 5, isTextBox: true });
+  s.addText("Full reference list (all sources used in the code and README): README §13", { x: 6.9, y: 6.66, w: 5.85, h: 0.3, fontSize: 10, italic: true, color: "94A3B8", margin: 0, isTextBox: true });
   s.addNotes(NOTES[10]);
 
   await pres.writeFile({ fileName: OUT });
