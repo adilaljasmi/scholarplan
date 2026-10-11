@@ -46,6 +46,8 @@ cp .env.example .env        # then paste your free Groq key after GROQ_API_KEY=
 ```
 
 > Run every command from inside the `scholarplan` folder. If your shell says `uv` is not recognised, `pip` installed it into a folder that is not on your PATH (common with per-user Python on Windows). Use `python -m uv` instead, or `py -m uv` on Windows: for example `py -m uv run scholarplan ui`.
+>
+> **Without uv:** every dependency is also pinned in `requirements.txt` (exported from `uv.lock`). With Python 3.11 or 3.12, run `python -m venv .venv`, activate it, then `pip install -r requirements.txt`. The commands below then work without the `uv run` prefix (for example `scholarplan ui`, `pytest`).
 
 | Task | Command |
 |---|---|
