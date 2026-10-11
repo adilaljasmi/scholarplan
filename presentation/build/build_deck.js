@@ -163,7 +163,7 @@ function notesBySlide() {
     { text: "Process the data: Processor, Critic", options: { bullet: true, fontSize: 13, color: C.text2, breakLine: true } },
     { text: "Store in a usable format: Archivist", options: { bullet: true, fontSize: 13, color: C.text2 } },
   ], { x: 0.85, y: 3.98, w: 5.6, h: 2.45, valign: "top", margin: 0, paraSpaceAfter: 3, isTextBox: true });
-  const stats = [["5", "agents implemented"], ["94", "automated tests · 93% coverage"], ["3/3", "live goals completed in budget"], ["~1 min", "per live run · ~21k tokens"]];
+  const stats = [["5", "agents implemented"], ["96", "automated tests · 92% coverage"], ["3/3", "live goals completed in budget"], ["~1 min", "per live run · ~21k tokens"]];
   stats.forEach(([n, l], i) => {
     const x = 6.95 + (i % 2) * 2.9, y = 3.85 + Math.floor(i / 2) * 1.35;
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 2.75, h: 1.2, rectRadius: 0.1, fill: { color: "FFFFFF" }, line: { color: "CBD5E1" } });
@@ -185,7 +185,7 @@ function notesBySlide() {
   ], { x: bbx + 0.15, y: bby + 0.1, w: bbw - 0.3, h: bbh - 0.2, align: "center", valign: "middle", margin: 0, isTextBox: true });
   const cards = [
     ["planner", 2.75, 1.4, "Deliberative · ReAct", "gpt-oss-120b"],
-    ["retriever", 0.6, 2.85, "Reactive · no LLM", "3 open APIs"],
+    ["retriever", 0.5, 2.85, "Reactive · no LLM", "3 open APIs"],
     ["processor", 6.3, 2.85, "Reactive", "gpt-oss-20b + MiniLM"],
     ["critic", 0.95, 4.95, "Reactive verifier", "qwen3.8-27b"],
     ["archivist", 4.55, 4.95, "Reactive · only disk writer", "no LLM"],
@@ -201,9 +201,9 @@ function notesBySlide() {
   // connectors (read/write)
   const conn = (x1, y1, x2, y2) => s.addShape(pres.shapes.LINE, { x: Math.min(x1, x2), y: Math.min(y1, y2), w: Math.abs(x2 - x1), h: Math.abs(y2 - y1), line: { color: "94A3B8", width: 1.5, beginArrowType: "triangle", endArrowType: "triangle" } });
   conn(4.33, 2.65, 4.33, 2.85);
-  conn(2.45, 3.48, 2.55, 3.48);
+  conn(2.35, 3.48, 2.55, 3.48);
   conn(6.1, 3.48, 6.3, 3.48);
-  conn(2.5, 4.6, 2.5, 4.95);
+  conn(3.0, 4.6, 3.0, 4.95);
   conn(5.6, 4.6, 5.6, 4.95);
   // right column
   const pts = [
@@ -286,14 +286,16 @@ function notesBySlide() {
   // band B: subclasses
   const subs = [["planner", "PlannerAgent", "_react_step() · _validate()\n⇢ LLMClient"], ["retriever", "RetrieverAgent", "search 3 APIs\n⇢ API clients"], ["processor", "ProcessorAgent", "select_sources()\n⇢ LLMClient, Embedder"], ["critic", "CriticAgent", "claim + synthesis checks\n⇢ LLMClient"], ["archivist", "ArchivistAgent", "report · BibTeX · index\n⇢ Embedder"]];
   const bw = 2.3, bg = 0.15, by = 3.0;
-  line(5.1, 2.3, 5.1, 2.62, { beginArrowType: "triangle" });
+  // UML generalisation uses a hollow triangle; pptx arrowheads are filled, so draw it as a shape.
+  line(5.1, 2.44, 5.1, 2.62);
+  s.addShape(pres.shapes.ISOSCELES_TRIANGLE, { x: 5.0, y: 2.3, w: 0.2, h: 0.15, fill: { color: "FFFFFF" }, line: { color: "475569", width: 1.25 }, objectName: "generalisation arrowhead" });
   line(0.6 + bw / 2, 2.62, 0.6 + 4 * (bw + bg) + bw / 2, 2.62);
   subs.forEach(([k, n, b], i) => {
     const x = 0.6 + i * (bw + bg);
     line(x + bw / 2, 2.62, x + bw / 2, by);
     box(x, by, bw, 0.95, n, "", b, AG[k].hex);
   });
-  s.addText("generalisation", { x: 5.2, y: 2.32, w: 1.2, h: 0.25, fontSize: 10, color: MUTED, margin: 0, isTextBox: true });
+  s.addText("generalisation", { x: 5.3, y: 2.32, w: 1.2, h: 0.25, fontSize: 10, color: MUTED, margin: 0, isTextBox: true });
   // band C: packages
   const pkg = (x, w, label) => {
     s.addShape(pres.shapes.RECTANGLE, { x, y: 4.55, w, h: 2.0, fill: { color: "F8FAFC" }, line: { color: "CBD5E1", dashType: "dash" } });
@@ -312,31 +314,47 @@ function notesBySlide() {
   box(8.15, 5.7, 2.9, 0.75, "Arxiv · OpenAlex · Crossref", "", "parse → common record");
   box(11.4, 4.85, 1.35, 1.6, "Settings", "«frozen»", "all thresholds, budgets, models");
   // dependencies (dashed)
-  s.addText("◆ aggregation (Controller holds 5 agents)   ▲ generalisation (5 roles inherit Agent)   ⇢ dependency (listed in each class)", { x: 0.6, y: 6.68, w: 12.1, h: 0.3, fontSize: 10, italic: true, color: MUTED, margin: 0, isTextBox: true });
+  s.addText("◆ composition (Controller creates and owns its 5 agents)   △ generalisation (5 roles inherit Agent)   ⇢ dependency (listed in each class)", { x: 0.6, y: 6.68, w: 12.1, h: 0.3, fontSize: 10, italic: true, color: MUTED, margin: 0, isTextBox: true });
   s.addNotes(NOTES[5]);
 
-  // ================================================================ 6  Live demo
+  // ================================================================ 6  Demonstration (screenshot walkthrough)
+  // Four moments from real live runs, captured from the dashboard
+  // (presentation/assets, produced by make_demo_assets.js).
   pres.addSection({ title: "Demonstration" });
   s = pres.addSlide({ masterName: "Content Dark", sectionTitle: "Demonstration" });
-  s.addText("Live demonstration", { placeholder: "title" });
-  s.addShape(pres.shapes.RECTANGLE, { x: 0.6, y: 1.35, w: 7.6, h: 4.75, fill: { color: "1E293B" }, line: { color: "475569", width: 1 }, shadow: { type: "outer", color: "000000", opacity: 0.4, blur: 8, offset: 3, angle: 90 } });
-  s.addImage({ path: path.join(SHOTS, "01_dashboard_trace.png"), x: 0.6, y: 1.35, w: 7.6, h: 4.75, objectName: "dashboard screenshot" });
-  s.addText("Streamlit dashboard reading the live blackboard · uv run scholarplan ui", { x: 0.6, y: 6.18, w: 7.6, h: 0.3, fontSize: 11, italic: true, color: "94A3B8", margin: 0, isTextBox: true });
-  s.addText("What to watch", { x: 8.6, y: 1.35, w: 4.1, h: 0.45, fontSize: 20, bold: true, color: THEME.colors.accent2, fontFace: "Cambria", margin: 0, isTextBox: true });
-  const watch = [
-    ["planner", "Planner Thought → 4-subtask plan"],
-    ["retriever", "Highlighted card = agent acting; per-API record counts"],
-    ["processor", "Duplicates removed · sources selected"],
-    ["critic", "Planted [DEMO] claim rejected, with reason + abstract"],
-    ["archivist", "Report · BibTeX · semantic search of the index"],
+  s.addText("Demonstration: live runs, step by step", { placeholder: "title" });
+  const ASSETS = path.join(ROOT, "presentation", "assets");
+  const panels = [
+    ["planner", "demo_1_plan.png", "Planner reasons, then acts: Thought → create_plan → issue_subtask"],
+    ["critic", "demo_2_critic.png", "Critic rejects the planted claim, citing the real abstract (16/17 kept)"],
+    ["processor", "demo_3_replan.png", "Feedback drives re-planning: 2 re-plans, then 4/4 verified (earlier live run)"],
+    ["archivist", "demo_4_report.png", "Verified report: Harvard citations keep claim IDs; BibTeX and trace saved"],
   ];
-  watch.forEach(([k, t], i) => {
-    const y = 1.98 + i * 0.78;
-    agentDot(s, k, 8.6, y, 0.52);
-    s.addText(t, { x: 9.25, y: y - 0.04, w: 3.5, h: 0.62, fontSize: 14, color: "E2E8F0", valign: "middle", margin: 0, isTextBox: true });
-  });
-  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 8.6, y: 5.95, w: 4.15, h: 0.62, rectRadius: 0.08, fill: { color: "1E293B" }, line: { color: "475569" } });
-  s.addText("Code: planner._react_step · _validate · blackboard.claim_subtask", { x: 8.72, y: 5.97, w: 3.95, h: 0.58, fontSize: 12, color: "CBD5E1", valign: "middle", margin: 0, fontFace: "Calibri", isTextBox: true });
+  const PW = 5.95, PH = 2.15;
+  for (let i = 0; i < panels.length; i++) {
+    const [k, file, caption] = panels[i];
+    const px = 0.6 + (i % 2) * (PW + 0.2);
+    const cy = 1.3 + Math.floor(i / 2) * 2.65;
+    const py = cy + 0.36;
+    // caption: numbered badge in the agent's colour
+    s.addShape(pres.shapes.OVAL, { x: px, y: cy + 0.02, w: 0.3, h: 0.3, fill: { color: AG[k].hex }, line: { color: AG[k].hex } });
+    s.addText(String(i + 1), { x: px, y: cy + 0.02, w: 0.3, h: 0.3, fontSize: 12, bold: true, color: "FFFFFF", align: "center", valign: "middle", margin: 0, isTextBox: true });
+    s.addText(caption, { x: px + 0.4, y: cy, w: PW - 0.4, h: 0.34, fontSize: 13, bold: true, color: "E2E8F0", valign: "middle", margin: 0, isTextBox: true });
+    // screenshot, fitted inside a dark frame without distortion
+    s.addShape(pres.shapes.RECTANGLE, { x: px, y: py, w: PW, h: PH, fill: { color: "0E1117" }, line: { color: "334155", width: 1 }, objectName: `panel ${i + 1} frame` });
+    const meta = await sharp(path.join(ASSETS, file)).metadata();
+    const ratio = meta.width / meta.height;
+    const pad = 0.06;
+    let w = PW - 2 * pad, h = w / ratio;
+    if (h > PH - 2 * pad) { h = PH - 2 * pad; w = h * ratio; }
+    s.addImage({ path: path.join(ASSETS, file), x: px + (PW - w) / 2, y: py + (PH - h) / 2, w, h, objectName: `panel ${i + 1} screenshot` });
+  }
+  s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x: 0.6, y: 6.56, w: 12.1, h: 0.42, rectRadius: 0.06, fill: { color: "1E293B" }, line: { color: "334155" } });
+  s.addText([
+    { text: "All evidence → ", options: { bold: true, color: THEME.colors.accent2 } },
+    { text: "github.com/adilaljasmi/scholarplan", options: { bold: true, color: "FFFFFF", hyperlink: { url: "https://github.com/adilaljasmi/scholarplan" } } },
+    { text: "  ·  evidence/runs  ·  evidence/screenshots  ·  evidence/tests  ·  evidence/evaluation  ·  docs/REMEDIATION_LOG.md", options: { color: "CBD5E1" } },
+  ], { x: 0.75, y: 6.56, w: 11.85, h: 0.42, fontSize: 11, valign: "middle", margin: 0, isTextBox: true });
   s.addNotes(NOTES[6]);
 
   // ================================================================ 7  Evaluation
@@ -360,7 +378,7 @@ function notesBySlide() {
   });
   s.addText("Targets: precision ≥ 0.85, recall ≥ 0.75. Small benchmark: a perfect score likely reflects a ceiling effect.", { x: 0.6, y: 5.7, w: 6.6, h: 0.55, fontSize: 12, italic: true, color: C.text2, margin: 0, isTextBox: true });
   const evs = [
-    ["0.90", "Retrieval recall (target ≥ 0.75)", "10 fixed queries for papers our Unit 6 report cited; arXiv 7 · OpenAlex 6 · Crossref 1. Miss: Hayes-Roth (1985), no indexed abstract."],
+    ["0.90", "Retrieval recall (target ≥ 0.75)", "10 fixed queries for papers our Unit 6 report cited; arXiv 8 · OpenAlex 6 · Crossref 1. Miss: Hayes-Roth (1985), no indexed abstract."],
     ["3/3", "Live goals completed within budget", "Mean 6.7 ReAct steps, 58.5 s and ~21k tokens per run; 2 genuine re-plans."],
     ["0.92 · 0.30", "Dedup / relevance cosine thresholds", "Named constants, unit-tested both ways; top-3 sources, ≤ 2 claims each, pass if ≥ 50% supported."],
   ];
@@ -377,7 +395,7 @@ function notesBySlide() {
   // ================================================================ 8  Testing
   s = pres.addSlide({ masterName: "Content Light", sectionTitle: "Evidence" });
   s.addText("Testing, remediation and development progress", { placeholder: "title" });
-  const tstats = [["94", "tests passing"], ["93%", "line coverage"], ["4/4", "live smoke tests"], ["19", "defects remediated"]];
+  const tstats = [["96", "tests passing"], ["92%", "line coverage"], ["4/4", "live smoke tests"], ["20", "defects remediated"]];
   tstats.forEach(([n, l], i) => {
     const x = 0.6 + (i % 2) * 1.95, y = 1.4 + Math.floor(i / 2) * 1.3;
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 1.8, h: 1.15, rectRadius: 0.1, fill: { color: C.background2 }, line: { color: C.background2 } });
@@ -389,7 +407,7 @@ function notesBySlide() {
     ["Evaluation harness", "quality of LLM parts vs targets", 1.6, "0E7C7B"],
     ["Live smoke (4)", "API / model drift", 2.2, "16A34A"],
     ["Functional (12)", "whole system, forced failure paths", 2.8, "2563EB"],
-    ["Unit (82)", "blackboard · parsers · rules · formatting", 3.4, "1E293B"],
+    ["Unit (84)", "blackboard · parsers · rules · formatting", 3.4, "1E293B"],
   ];
   layers.forEach(([h, t, w, col], i) => {
     const y = 4.15 + i * 0.6;
@@ -415,13 +433,13 @@ function notesBySlide() {
   }
   // progress timeline
   s.addText("Development progress (Git history)", { x: 4.9, y: 5.4, w: 7.85, h: 0.3, fontSize: 13, bold: true, color: C.text1, margin: 0, isTextBox: true });
-  const tl = ["Unit 6 design", "Scaffold", "Blackboard & APIs", "LLM layer & agents", "Unit + functional tests", "Evaluation", "Dashboard & live eval", "README & evidence"];
+  const tl = ["Unit 6 design", "Scaffold", "Blackboard & APIs", "LLM layer & agents", "Unit + functional tests", "Evaluation", "Dashboard & live eval", "README & evidence", "Presentation"];
   const tx0 = 5.0, tx1 = 12.6;
   s.addShape(pres.shapes.LINE, { x: tx0, y: 5.95, w: tx1 - tx0, h: 0, line: { color: "CBD5E1", width: 2 } });
   tl.forEach((t, i) => {
     const x = tx0 + (i * (tx1 - tx0)) / (tl.length - 1);
     s.addShape(pres.shapes.OVAL, { x: x - 0.09, y: 5.86, w: 0.18, h: 0.18, fill: { color: i === 0 ? THEME.colors.accent2 : THEME.colors.accent1 }, line: { color: "FFFFFF" } });
-    s.addText(t, { x: x - 0.5, y: 6.1, w: 1.0, h: 0.5, fontSize: 10, color: C.text2, align: "center", valign: "top", margin: 0, isTextBox: true });
+    s.addText(t, { x: x - 0.46, y: 6.1, w: 0.92, h: 0.5, fontSize: 10, color: C.text2, align: "center", valign: "top", margin: 0, isTextBox: true });
   });
   s.addNotes(NOTES[8]);
 
@@ -475,7 +493,7 @@ function notesBySlide() {
   s.addText("Conclusion", { placeholder: "title" });
   const takes = [
     ["Design met", "Hybrid ReAct planner + reactive specialists on a SQLite blackboard, as proposed in Unit 6"],
-    ["Hallucinations filtered", "Independent Critic: P = R = 1.00 on the benchmark; caught the planted claim live"],
+    ["Hallucinations filtered", "Independent Critic: P = R = 1.00 on the benchmark; caught a planted claim in a live run"],
     ["Feedback addressed", "Class diagram · measurable targets · 3-re-plan cap, all implemented and tested"],
   ];
   takes.forEach(([h, t], i) => {

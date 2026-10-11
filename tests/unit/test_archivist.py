@@ -51,3 +51,19 @@ def test_vector_index_round_trip(tmp_path, embedder):
     hits = search_index(path, "shared blackboard memory for agents", embedder, k=2)
     assert hits[0]["citation"] == "(Hayes-Roth, 1985)"
     assert hits[0]["distance"] <= hits[1]["distance"]
+
+
+def test_citation_rendering_merges_adjacent_and_accepts_spacing():
+    """Regression for R20: '[ C27]' was left raw and adjacent markers ran together."""
+    from scholarplan.agents.archivist import render_citations
+    sources = {1: s(["Lisa Robert", "Ann Sanyal"], title="A"), 2: s(["Bo Fu", "C D", "E F"], title="B")}
+    claims = [{"id": 20, "source_id": 1}, {"id": 21, "source_id": 1}, {"id": 25, "source_id": 2}]
+    out = render_citations("Better by 23%[C20][C21]. Also [ C25], and [C99].", claims, sources)
+    assert "23% (Robert and Sanyal, 2023)<sup>C20, C21</sup>." in out
+    assert "Also (Fu et al., 2023)<sup>C25</sup>," in out
+    assert "[C99]" in out  # unknown ids stay visible rather than being dropped
+
+
+def test_critic_counts_spaced_citations():
+    from scholarplan.agents.critic import citation_problems
+    assert citation_problems("Claim [ C3].", {3}) == []

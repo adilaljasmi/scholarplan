@@ -1,0 +1,42 @@
+{
+  "run_id": "20261011-185351-1dd44e",
+  "goal": "How does verifying LLM outputs against retrieved sources reduce hallucination?",
+  "llm_backend": "groq",
+  "steps_used": 6,
+  "step_budget": 20,
+  "subtasks": {
+    "verified": 4
+  },
+  "replans": 0,
+  "sources_retrieved": 55,
+  "duplicates_removed": 4,
+  "sources_selected": 12,
+  "claims_total": 14,
+  "claims_supported": 14,
+  "claims_unsupported": 0,
+  "synthesis_attempts": 1,
+  "synthesis_status": "verified",
+  "index_vectors": 22,
+  "llm_usage": {
+    "calls": 16,
+    "prompt_tokens": 16856,
+    "completion_tokens": 3039,
+    "by_model": {
+      "openai/gpt-oss-120b": {
+        "calls": 7,
+        "prompt_tokens": 5060,
+        "completion_tokens": 1055
+      },
+      "openai/gpt-oss-20b": {
+        "calls": 4,
+        "prompt_tokens": 4641,
+        "completion_tokens": 1167
+      },
+      "qwen/qwen3.8-27b": {
+        "calls": 5,
+        "prompt_tokens": 7155,
+        "completion_tokens": 817
+      }
+    }
+  }
+}

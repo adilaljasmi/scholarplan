@@ -116,6 +116,37 @@ def bibtex_entry(src: dict[str, Any], key: str) -> str:
     return f"@{kind}{{{key},\n{body}\n}}"
 
 
+# A run of one or more adjacent claim markers, e.g. "[C20][C21]" or " [ C27]".
+_MARKER_RUN = re.compile(r"(?:\s*\[\s*C\s*\d+\s*\])+")
+
+
+def render_citations(text: str, claims: list[dict[str, Any]], sources: dict[int, dict[str, Any]]) -> str:
+    """Turn [C12] claim markers into Harvard in-text citations, keeping claim ids.
+
+    Adjacent markers are merged into one parenthetical, as Harvard expects
+    ("(A, 2023; B, 2024)" rather than "(A, 2023)(B, 2024)"), and the claim
+    ids stay visible as a superscript so every statement remains auditable
+    against the evidence table. Spacing variants such as "[ C27]" are
+    accepted because live models produce them (remediation R20).
+    """
+    by_id = {c["id"]: c for c in claims}
+
+    def sub(m: re.Match) -> str:
+        ids = [int(x) for x in re.findall(r"C\s*(\d+)", m.group(0))]
+        known = [by_id[i] for i in ids if i in by_id]
+        if not known:
+            return m.group(0)  # unknown ids are left visible, never silently dropped
+        names: list[str] = []
+        for c in known:
+            name = harvard_intext(sources[c["source_id"]])[1:-1]
+            if name not in names:
+                names.append(name)
+        sup = ", ".join(f"C{c['id']}" for c in known)
+        return f" ({'; '.join(names)})<sup>{sup}</sup>"
+
+    return re.sub(r" +([.,;:])", r"\1", _MARKER_RUN.sub(sub, text))
+
+
 # ------------------------------------------------------------- vector index
 def build_index(path: Path, items: list[dict[str, Any]], embedder: Embedder) -> int:
     """Write a sqlite-vec index. sqlite-vec was chosen in Unit 6 so the index is a
@@ -227,14 +258,7 @@ class ArchivistAgent(Agent):
     # ------------------------------------------------------------ helpers
     def _report(self, run, syn, claims, sources, cited, accessed, sb) -> str:
         def render(text: str) -> str:
-            # Replace [C12] markers with Harvard in-text citations for readers,
-            # while keeping the claim id so every statement stays auditable.
-            by_id = {c["id"]: c for c in claims}
-
-            def sub(m: re.Match) -> str:
-                c = by_id.get(int(m.group(1)))
-                return f"{harvard_intext(sources[c['source_id']])}<sup>C{c['id']}</sup>" if c else m.group(0)
-            return re.sub(r"\[C(\d+)\]", sub, text)
+            return render_citations(text, claims, sources)
 
         subtasks = sb.subtasks()
         lines = [f"# ScholarPlan research report", "",

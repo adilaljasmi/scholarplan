@@ -25,3 +25,5 @@ output/
 presentation/build/node_modules/
 presentation/build/package-lock.json
 presentation/render/
+presentation/assets/raw_*.png
+!evidence/runs/*.log

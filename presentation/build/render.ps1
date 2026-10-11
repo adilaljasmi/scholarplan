@@ -1,6 +1,9 @@
 # Render every slide of the deck to PNG using the installed PowerPoint (visual QA).
 param([string]$Deck, [string]$OutDir)
 $ErrorActionPreference = "Stop"
+# Automation attaches to a running PowerPoint and Quit() would close the
+# user's own window (and any unsaved work), so refuse to run alongside it.
+if (Get-Process POWERPNT -ErrorAction SilentlyContinue) { throw "PowerPoint is open - close it before rendering." }
 New-Item -ItemType Directory -Force $OutDir | Out-Null
 Get-ChildItem $OutDir -Filter *.png -ErrorAction SilentlyContinue | Remove-Item -Force -Confirm:$false
 $ppt = New-Object -ComObject PowerPoint.Application

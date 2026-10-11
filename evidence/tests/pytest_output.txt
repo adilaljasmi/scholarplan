@@ -1,9 +1,9 @@
 ============================= test session starts =============================
 platform win32 -- Python 3.11.17, pytest-9.1.1, pluggy-1.6.0 -- .venv\Scripts\python.exe
-rootdir: 
+rootdir: .
 configfile: pyproject.toml
 plugins: anyio-4.15.1, cov-7.1.0
-collecting ... collected 98 items
+collecting ... collected 100 items
 
 tests/functional/test_end_to_end.py::test_happy_path_produces_verified_report PASSED [  1%]
 tests/functional/test_end_to_end.py::test_critic_rejection_triggers_reflexion_replanning PASSED [  2%]
@@ -26,82 +26,84 @@ tests/unit/test_archivist.py::test_same_author_year_gets_letters PASSED  [ 18%]
 tests/unit/test_archivist.py::test_harvard_reference_format PASSED       [ 19%]
 tests/unit/test_archivist.py::test_bibtex_arxiv_vs_article PASSED        [ 20%]
 tests/unit/test_archivist.py::test_vector_index_round_trip PASSED        [ 21%]
-tests/unit/test_blackboard.py::test_run_lifecycle_and_step_budget PASSED [ 22%]
-tests/unit/test_blackboard.py::test_claim_is_atomic_single_thread PASSED [ 23%]
-tests/unit/test_blackboard.py::test_claim_is_atomic_under_concurrency PASSED [ 24%]
-tests/unit/test_blackboard.py::test_claim_order_follows_plan_sequence PASSED [ 25%]
-tests/unit/test_blackboard.py::test_permissions_block_out_of_role_writes PASSED [ 26%]
-tests/unit/test_blackboard.py::test_reads_are_always_allowed PASSED      [ 27%]
-tests/unit/test_blackboard.py::test_unknown_role_rejected PASSED         [ 28%]
-tests/unit/test_blackboard.py::test_every_role_can_write_trace PASSED    [ 29%]
-tests/unit/test_blackboard.py::test_scoped_log_records_role PASSED       [ 30%]
-tests/unit/test_blackboard.py::test_invalid_states_and_labels_rejected PASSED [ 31%]
-tests/unit/test_blackboard.py::test_replan_updates_query_attempts_and_strategy PASSED [ 32%]
-tests/unit/test_blackboard.py::test_feedback_consumption PASSED          [ 33%]
-tests/unit/test_blackboard.py::test_transaction_rolls_back_on_error PASSED [ 34%]
-tests/unit/test_critic.py::test_subtask_acceptance_rule[2-2-True] PASSED [ 35%]
-tests/unit/test_critic.py::test_subtask_acceptance_rule[1-2-True] PASSED [ 36%]
-tests/unit/test_critic.py::test_subtask_acceptance_rule[1-3-False] PASSED [ 37%]
-tests/unit/test_critic.py::test_subtask_acceptance_rule[0-2-False] PASSED [ 38%]
-tests/unit/test_critic.py::test_subtask_acceptance_rule[0-0-False] PASSED [ 39%]
-tests/unit/test_critic.py::test_citation_precheck PASSED                 [ 40%]
-tests/unit/test_critic.py::test_missing_verdict_defaults_to_unsupported PASSED [ 41%]
-tests/unit/test_critic.py::test_rejection_writes_feedback_for_planner PASSED [ 42%]
-tests/unit/test_critic.py::test_critic_llm_failure_rejects_rather_than_accepts PASSED [ 43%]
-tests/unit/test_critic.py::test_synthesis_with_unknown_citation_rejected_without_llm PASSED [ 44%]
-tests/unit/test_llm.py::test_extract_json_tolerates_wrappers[{"a": 1}] PASSED [ 45%]
-tests/unit/test_llm.py::test_extract_json_tolerates_wrappers[```json\n{"a": 1}\n```] PASSED [ 46%]
-tests/unit/test_llm.py::test_extract_json_tolerates_wrappers[Sure! Here is the JSON: {"a": 1} Hope this helps.] PASSED [ 47%]
-tests/unit/test_llm.py::test_call_json_repairs_invalid_output PASSED     [ 48%]
-tests/unit/test_llm.py::test_call_json_gives_up_after_retries PASSED     [ 50%]
-tests/unit/test_llm.py::test_schema_rejects_empty_plan PASSED            [ 51%]
-tests/unit/test_llm.py::test_live_client_request_shape_and_usage PASSED  [ 52%]
-tests/unit/test_llm.py::test_live_client_omits_reasoning_effort_for_other_models PASSED [ 53%]
-tests/unit/test_llm.py::test_live_client_backs_off_on_429 PASSED         [ 54%]
-tests/unit/test_llm.py::test_live_client_substitutes_withdrawn_model PASSED [ 55%]
-tests/unit/test_llm.py::test_live_client_fails_fast_on_auth_error PASSED [ 56%]
-tests/unit/test_llm.py::test_live_client_requires_key PASSED             [ 57%]
-tests/unit/test_llm.py::test_repair_prompt_names_the_invalid_field PASSED [ 58%]
-tests/unit/test_llm.py::test_overlong_summary_is_truncated_not_rejected PASSED [ 59%]
-tests/unit/test_llm.py::test_json_mode_dropped_on_final_attempt PASSED   [ 60%]
-tests/unit/test_planner.py::test_coverage PASSED                         [ 61%]
-tests/unit/test_planner.py::test_allowed_actions_feedback_first PASSED   [ 62%]
-tests/unit/test_planner.py::test_allowed_actions_synthesis_gated_by_coverage PASSED [ 63%]
-tests/unit/test_planner.py::test_default_policy_cycles_sources_then_abandons PASSED [ 64%]
-tests/unit/test_planner.py::test_validate_rejects_illegal_and_repeated_moves PASSED [ 65%]
-tests/unit/test_planner.py::test_plan_is_bounded_and_deduplicated PASSED [ 66%]
-tests/unit/test_planner.py::test_replan_cap_marks_unresolvable_without_llm PASSED [ 67%]
-tests/unit/test_planner.py::test_budget_exhaustion_forces_synthesis PASSED [ 68%]
-tests/unit/test_planner.py::test_invalid_llm_decisions_fall_back_to_policy PASSED [ 69%]
-tests/unit/test_planner.py::test_refine_records_new_query_and_attempt PASSED [ 70%]
-tests/unit/test_planner.py::test_planner_waits_while_work_in_flight PASSED [ 71%]
-tests/unit/test_planner.py::test_clean_query_normalises_typographic_hyphens PASSED [ 72%]
-tests/unit/test_processor.py::test_doi_duplicates_removed_case_insensitively PASSED [ 73%]
-tests/unit/test_processor.py::test_title_duplicates_removed PASSED       [ 74%]
-tests/unit/test_processor.py::test_embedding_near_duplicates_use_threshold PASSED [ 75%]
-tests/unit/test_processor.py::test_relevance_floor_filters_noise PASSED  [ 76%]
-tests/unit/test_processor.py::test_top_k_and_missing_abstract PASSED     [ 77%]
-tests/unit/test_processor.py::test_sources_used_by_earlier_subtasks_are_duplicates PASSED [ 78%]
-tests/unit/test_processor.py::test_processor_drops_claims_for_unknown_sources PASSED [ 79%]
-tests/unit/test_processor.py::test_processor_caps_claims_per_source PASSED [ 80%]
-tests/unit/test_processor.py::test_processor_rejects_when_nothing_relevant PASSED [ 81%]
-tests/unit/test_processor.py::test_processing_failure_feedback_states_the_cause PASSED [ 82%]
-tests/unit/test_sources.py::test_arxiv_parse_recorded_response PASSED    [ 83%]
-tests/unit/test_sources.py::test_arxiv_query_is_boolean_over_content_words PASSED [ 84%]
-tests/unit/test_sources.py::test_arxiv_error_entry_is_ignored PASSED     [ 85%]
-tests/unit/test_sources.py::test_openalex_parse_rebuilds_inverted_abstract PASSED [ 86%]
-tests/unit/test_sources.py::test_crossref_parse_strips_jats_markup PASSED [ 87%]
-tests/unit/test_sources.py::test_normalise_doi[https://doi.org/10.1145/ABC-10.1145/abc] PASSED [ 88%]
-tests/unit/test_sources.py::test_normalise_doi[http://dx.doi.org/10.1/x-10.1/x] PASSED [ 89%]
-tests/unit/test_sources.py::test_normalise_doi[doi:10.1/X -10.1/x] PASSED [ 90%]
-tests/unit/test_sources.py::test_normalise_doi[-None] PASSED             [ 91%]
-tests/unit/test_sources.py::test_normalise_doi[None-None] PASSED         [ 92%]
-tests/unit/test_sources.py::test_title_normalisation_and_keywords PASSED [ 93%]
-tests/unit/test_sources.py::test_inverted_abstract_and_markup PASSED     [ 94%]
-tests/unit/test_sources.py::test_rate_limiter_enforces_spacing PASSED    [ 95%]
-tests/unit/test_sources.py::test_http_cache_avoids_second_network_call PASSED [ 96%]
-tests/unit/test_sources.py::test_http_retries_transient_errors PASSED    [ 97%]
-tests/unit/test_sources.py::test_http_does_not_retry_client_errors PASSED [ 98%]
+tests/unit/test_archivist.py::test_citation_rendering_merges_adjacent_and_accepts_spacing PASSED [ 22%]
+tests/unit/test_archivist.py::test_critic_counts_spaced_citations PASSED [ 23%]
+tests/unit/test_blackboard.py::test_run_lifecycle_and_step_budget PASSED [ 24%]
+tests/unit/test_blackboard.py::test_claim_is_atomic_single_thread PASSED [ 25%]
+tests/unit/test_blackboard.py::test_claim_is_atomic_under_concurrency PASSED [ 26%]
+tests/unit/test_blackboard.py::test_claim_order_follows_plan_sequence PASSED [ 27%]
+tests/unit/test_blackboard.py::test_permissions_block_out_of_role_writes PASSED [ 28%]
+tests/unit/test_blackboard.py::test_reads_are_always_allowed PASSED      [ 29%]
+tests/unit/test_blackboard.py::test_unknown_role_rejected PASSED         [ 30%]
+tests/unit/test_blackboard.py::test_every_role_can_write_trace PASSED    [ 31%]
+tests/unit/test_blackboard.py::test_scoped_log_records_role PASSED       [ 32%]
+tests/unit/test_blackboard.py::test_invalid_states_and_labels_rejected PASSED [ 33%]
+tests/unit/test_blackboard.py::test_replan_updates_query_attempts_and_strategy PASSED [ 34%]
+tests/unit/test_blackboard.py::test_feedback_consumption PASSED          [ 35%]
+tests/unit/test_blackboard.py::test_transaction_rolls_back_on_error PASSED [ 36%]
+tests/unit/test_critic.py::test_subtask_acceptance_rule[2-2-True] PASSED [ 37%]
+tests/unit/test_critic.py::test_subtask_acceptance_rule[1-2-True] PASSED [ 38%]
+tests/unit/test_critic.py::test_subtask_acceptance_rule[1-3-False] PASSED [ 39%]
+tests/unit/test_critic.py::test_subtask_acceptance_rule[0-2-False] PASSED [ 40%]
+tests/unit/test_critic.py::test_subtask_acceptance_rule[0-0-False] PASSED [ 41%]
+tests/unit/test_critic.py::test_citation_precheck PASSED                 [ 42%]
+tests/unit/test_critic.py::test_missing_verdict_defaults_to_unsupported PASSED [ 43%]
+tests/unit/test_critic.py::test_rejection_writes_feedback_for_planner PASSED [ 44%]
+tests/unit/test_critic.py::test_critic_llm_failure_rejects_rather_than_accepts PASSED [ 45%]
+tests/unit/test_critic.py::test_synthesis_with_unknown_citation_rejected_without_llm PASSED [ 46%]
+tests/unit/test_llm.py::test_extract_json_tolerates_wrappers[{"a": 1}] PASSED [ 47%]
+tests/unit/test_llm.py::test_extract_json_tolerates_wrappers[```json\n{"a": 1}\n```] PASSED [ 48%]
+tests/unit/test_llm.py::test_extract_json_tolerates_wrappers[Sure! Here is the JSON: {"a": 1} Hope this helps.] PASSED [ 49%]
+tests/unit/test_llm.py::test_call_json_repairs_invalid_output PASSED     [ 50%]
+tests/unit/test_llm.py::test_call_json_gives_up_after_retries PASSED     [ 51%]
+tests/unit/test_llm.py::test_schema_rejects_empty_plan PASSED            [ 52%]
+tests/unit/test_llm.py::test_live_client_request_shape_and_usage PASSED  [ 53%]
+tests/unit/test_llm.py::test_live_client_omits_reasoning_effort_for_other_models PASSED [ 54%]
+tests/unit/test_llm.py::test_live_client_backs_off_on_429 PASSED         [ 55%]
+tests/unit/test_llm.py::test_live_client_substitutes_withdrawn_model PASSED [ 56%]
+tests/unit/test_llm.py::test_live_client_fails_fast_on_auth_error PASSED [ 57%]
+tests/unit/test_llm.py::test_live_client_requires_key PASSED             [ 58%]
+tests/unit/test_llm.py::test_repair_prompt_names_the_invalid_field PASSED [ 59%]
+tests/unit/test_llm.py::test_overlong_summary_is_truncated_not_rejected PASSED [ 60%]
+tests/unit/test_llm.py::test_json_mode_dropped_on_final_attempt PASSED   [ 61%]
+tests/unit/test_planner.py::test_coverage PASSED                         [ 62%]
+tests/unit/test_planner.py::test_allowed_actions_feedback_first PASSED   [ 63%]
+tests/unit/test_planner.py::test_allowed_actions_synthesis_gated_by_coverage PASSED [ 64%]
+tests/unit/test_planner.py::test_default_policy_cycles_sources_then_abandons PASSED [ 65%]
+tests/unit/test_planner.py::test_validate_rejects_illegal_and_repeated_moves PASSED [ 66%]
+tests/unit/test_planner.py::test_plan_is_bounded_and_deduplicated PASSED [ 67%]
+tests/unit/test_planner.py::test_replan_cap_marks_unresolvable_without_llm PASSED [ 68%]
+tests/unit/test_planner.py::test_budget_exhaustion_forces_synthesis PASSED [ 69%]
+tests/unit/test_planner.py::test_invalid_llm_decisions_fall_back_to_policy PASSED [ 70%]
+tests/unit/test_planner.py::test_refine_records_new_query_and_attempt PASSED [ 71%]
+tests/unit/test_planner.py::test_planner_waits_while_work_in_flight PASSED [ 72%]
+tests/unit/test_planner.py::test_clean_query_normalises_typographic_hyphens PASSED [ 73%]
+tests/unit/test_processor.py::test_doi_duplicates_removed_case_insensitively PASSED [ 74%]
+tests/unit/test_processor.py::test_title_duplicates_removed PASSED       [ 75%]
+tests/unit/test_processor.py::test_embedding_near_duplicates_use_threshold PASSED [ 76%]
+tests/unit/test_processor.py::test_relevance_floor_filters_noise PASSED  [ 77%]
+tests/unit/test_processor.py::test_top_k_and_missing_abstract PASSED     [ 78%]
+tests/unit/test_processor.py::test_sources_used_by_earlier_subtasks_are_duplicates PASSED [ 79%]
+tests/unit/test_processor.py::test_processor_drops_claims_for_unknown_sources PASSED [ 80%]
+tests/unit/test_processor.py::test_processor_caps_claims_per_source PASSED [ 81%]
+tests/unit/test_processor.py::test_processor_rejects_when_nothing_relevant PASSED [ 82%]
+tests/unit/test_processor.py::test_processing_failure_feedback_states_the_cause PASSED [ 83%]
+tests/unit/test_sources.py::test_arxiv_parse_recorded_response PASSED    [ 84%]
+tests/unit/test_sources.py::test_arxiv_query_is_boolean_over_content_words PASSED [ 85%]
+tests/unit/test_sources.py::test_arxiv_error_entry_is_ignored PASSED     [ 86%]
+tests/unit/test_sources.py::test_openalex_parse_rebuilds_inverted_abstract PASSED [ 87%]
+tests/unit/test_sources.py::test_crossref_parse_strips_jats_markup PASSED [ 88%]
+tests/unit/test_sources.py::test_normalise_doi[https://doi.org/10.1145/ABC-10.1145/abc] PASSED [ 89%]
+tests/unit/test_sources.py::test_normalise_doi[http://dx.doi.org/10.1/x-10.1/x] PASSED [ 90%]
+tests/unit/test_sources.py::test_normalise_doi[doi:10.1/X -10.1/x] PASSED [ 91%]
+tests/unit/test_sources.py::test_normalise_doi[-None] PASSED             [ 92%]
+tests/unit/test_sources.py::test_normalise_doi[None-None] PASSED         [ 93%]
+tests/unit/test_sources.py::test_title_normalisation_and_keywords PASSED [ 94%]
+tests/unit/test_sources.py::test_inverted_abstract_and_markup PASSED     [ 95%]
+tests/unit/test_sources.py::test_rate_limiter_enforces_spacing PASSED    [ 96%]
+tests/unit/test_sources.py::test_http_cache_avoids_second_network_call PASSED [ 97%]
+tests/unit/test_sources.py::test_http_retries_transient_errors PASSED    [ 98%]
+tests/unit/test_sources.py::test_http_does_not_retry_client_errors PASSED [ 99%]
 tests/unit/test_sources.py::test_user_agent_identifies_client PASSED     [100%]
 
 - generated xml file: evidence\tests\junit.xml -
@@ -112,15 +114,15 @@ Name                                   Stmts   Miss  Cover   Missing
 --------------------------------------------------------------------
 src\scholarplan\__init__.py                1      0   100%
 src\scholarplan\agents\__init__.py         7      0   100%
-src\scholarplan\agents\archivist.py      177      4    98%   124, 188, 192-193
+src\scholarplan\agents\archivist.py      189      4    98%   155, 219, 223-224
 src\scholarplan\agents\base.py            15      0   100%
-src\scholarplan\agents\critic.py          83      3    96%   72, 134-135
+src\scholarplan\agents\critic.py          83      3    96%   74, 136-137
 src\scholarplan\agents\planner.py        207     17    92%   89, 105, 110, 156-160, 184, 210-212, 233, 239, 243, 297-299, 308
 src\scholarplan\agents\processor.py      115      4    97%   54, 80, 126, 190
 src\scholarplan\agents\prompts.py          6      0   100%
 src\scholarplan\agents\retriever.py       40      1    98%   33
 src\scholarplan\blackboard.py            223     11    95%   240, 257, 315, 360-363, 382-384, 481
-src\scholarplan\cli.py                    85     17    80%   44, 47-48, 72-83, 87-88, 118
+src\scholarplan\cli.py                   103     29    72%   49, 52-53, 77-88, 93-100, 104-114, 147
 src\scholarplan\config.py                 51      1    98%   126
 src\scholarplan\controller.py             85     11    87%   93, 112-114, 118-124
 src\scholarplan\embeddings.py             38      8    79%   56-63, 66-67, 75
@@ -134,8 +136,8 @@ src\scholarplan\sources\clients.py        78     15    81%   29, 41-43, 80, 85-8
 src\scholarplan\sources\http.py           74      3    96%   88, 115, 118
 src\scholarplan\sources\records.py        39      1    97%   43
 --------------------------------------------------------------------
-TOTAL                                   1592    113    93%
+TOTAL                                   1622    125    92%
 =========================== short test summary info ===========================
 SKIPPED [3] tests\live\test_live.py:30: live test: run with --live
 SKIPPED [1] tests\live\test_live.py: live test: run with --live
-======================== 94 passed, 4 skipped in 4.99s ========================
+======================== 96 passed, 4 skipped in 2.14s ========================

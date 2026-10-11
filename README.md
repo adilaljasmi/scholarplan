@@ -11,7 +11,7 @@ It implements the design proposed in the Unit 6 group report *"ScholarPlan: An L
 | **Agents** | Planner (deliberative, ReAct), Retriever, Processor, Critic, Archivist (reactive) |
 | **Coordination** | Shared SQLite **blackboard**; agents never call each other |
 | **Models** (Groq free tier) | Planner `gpt-oss-120b` · Processor `gpt-oss-20b` · Critic `qwen3.8-27b` |
-| **Tests** | 94 automated tests (82 unit incl. regression tests + 12 functional), **93% line coverage**, plus 4 live smoke tests |
+| **Tests** | 96 automated tests (84 unit incl. regression tests + 12 functional), **92% line coverage**, plus 4 live smoke tests |
 | **Evaluation** | Critic precision **1.00** / recall **1.00** (targets 0.85 / 0.75) · retrieval recall **0.90** (target 0.75) · 3/3 live goals completed within budget |
 
 ---
@@ -279,21 +279,21 @@ Each change keeps the *reason* behind the original decision while adapting to co
 
 **Strategy** (following the Unit 6 plan of "testing by agent type"):
 
-* **Unit tests (82, including regression tests for fixed defects)** cover the deterministic components: blackboard atomicity and permissions; API parsers run against **recorded real responses** (`tests/fixtures/`); rate limiting, caching and retries via injected `httpx` transports; dedup and relevance thresholds; Critic acceptance rules; Planner action validation, re-plan cap and budget; Harvard and BibTeX formatting; and the vector index.
+* **Unit tests (84, including regression tests for fixed defects)** cover the deterministic components: blackboard atomicity and permissions; API parsers run against **recorded real responses** (`tests/fixtures/`); rate limiting, caching and retries via injected `httpx` transports; dedup and relevance thresholds; Critic acceptance rules; Planner action validation, re-plan cap and budget; Harvard and BibTeX formatting; and the vector index.
 * **Functional tests (12)** run the whole multi-agent system end to end, offline. Each forces one behaviour: the happy path; Critic rejection leading to re-planning; the re-plan cap; no-results feedback; budget exhaustion; an **injected hallucination** being filtered; synthesis rejection then fallback; isolation of a failed API; the CLI; a later semantic search of the saved index; and the labelled demo-fabrication switch.
 * **Live smoke tests (4, `pytest --live`)** detect *drift* in external services (API format changes, withdrawn models).
 * **Evaluation harness** (section 8) estimates the quality of the non-deterministic LLM components, which unit tests cannot establish.
 
 ```text
 $ uv run pytest --cov=scholarplan
-94 passed, 4 skipped (live) in ~3 s        TOTAL coverage: 93%
+96 passed, 4 skipped (live) in ~3 s        TOTAL coverage: 92%
 $ uv run pytest tests/live --live
 4 passed in ~11 s
 ```
 
 Full outputs are in [`evidence/tests/`](evidence/tests/) (console log, JUnit XML, coverage report).
 
-**Remediation.** All 19 defects found during development are documented in [`docs/REMEDIATION_LOG.md`](docs/REMEDIATION_LOG.md), each with how it was found, its root cause, the fix and the verifying test. Highlights:
+**Remediation.** All 20 defects found during development are documented in [`docs/REMEDIATION_LOG.md`](docs/REMEDIATION_LOG.md), each with how it was found, its root cause, the fix and the verifying test. Highlights:
 * **R8**: the planned Critic model was withdrawn by the provider. Fixed by a substitution mechanism plus a regression test.
 * **R10**: OpenAlex `429` errors in the first live run. Fixed by honouring `Retry-After`, with request spacing raised to 1 s.
 * **R15**: in a live run the Planner **misdiagnosed** a model-format failure as a bad query, because the feedback message lacked the cause. Feedback now carries the diagnosis. This is a lesson about Reflexion-style systems: self-correction is only as good as the feedback signal.
@@ -305,7 +305,7 @@ Full outputs are in [`evidence/tests/`](evidence/tests/) (console log, JUnit XML
 
 Run with `uv run python eval/run_eval.py all`; raw results are in [`evidence/evaluation/`](evidence/evaluation/).
 
-**Critic quality** (21 hand-labelled pairs, 12 supported and 9 hallucinated; the hallucination types are over-generalisation, wrong entity, fabricated number, metric shift, contradiction and fabricated contribution):
+**Critic quality** (21 hand-labelled pairs, 12 supported and 9 hallucinated; the hallucination types are over-generalisation, wrong entity, fabricated number, metric shift, contradiction, fabricated contribution and unsupported comparison):
 
 | Critic | Precision | Recall | Hallucinations caught | Target met |
 |---|---|---|---|---|
@@ -320,7 +320,7 @@ The baseline misses contradictions and metric shifts that reuse the source's wor
 | Metric | Result | Target |
 |---|---|---|
 | Recall (known paper retrieved) | **0.90** (9/10) | ≥ 0.75 ✓ |
-| Found by arXiv / OpenAlex / Crossref | 7 / 6 / 1 | (no single API finds all, which justifies querying three) |
+| Found by arXiv / OpenAlex / Crossref | 8 / 6 / 1 | (no single API finds all, which justifies querying three) |
 | Missed | Hayes-Roth (1985) | old work without an indexed abstract, excluded by our `has_abstract` filter (a deliberate verifiability trade-off) |
 
 **End-to-end live runs** (3 fixed goals): **3/3 completed within the 20-step budget**; mean 6.7 steps; mean 58.5 s; about 21k tokens per run; 2 genuine re-plans (triggered by a Processor output failure); Critic pass rate over produced claims 1.00.
@@ -334,7 +334,9 @@ The baseline misses contradictions and metric shifts that reuse the source's wor
 | Live terminal run (Thought/Action/Observation trace) | `evidence/runs/live_cli_run.log` |
 | Generated report, BibTeX, trace and metrics from a live run | `evidence/runs/20261011-191009-2cb25b/` |
 | Live run with **genuine re-planning** (2 re-plans after Processor failures) | `evidence/runs/replanning_run/`, screenshots 07–09 |
-| Live run where the **Critic rejects a planted fabricated claim** | `evidence/runs/live_demo_fabrication.log`, `evidence/runs/demo_fabrication_run/`, screenshot 10 |
+| Live run where the **Critic rejects a planted fabricated claim** (slide 6) | `evidence/runs/live_demo_fabrication.log`, `evidence/runs/demo_fabrication_run/` (`report.md` as generated; `report_after_R20_fix.md` = same content re-rendered after fix R20), screenshot 10 |
+| First live run (the lenient-Critic example in section 11) | `evidence/runs/first_live_run/` |
+| Slide 6 panels (cropped dashboard captures) | `presentation/assets/demo_*.png` |
 | Dashboard screenshots: trace, subtasks, sources (dedup/relevance), claims and verdicts, report, metrics | `evidence/screenshots/01–06` |
 | Test-suite output, JUnit XML, coverage | `evidence/tests/` |
 | Evaluation results (JSON) | `evidence/evaluation/` |
@@ -360,7 +362,7 @@ The baseline misses contradictions and metric shifts that reuse the source's wor
 ## 11. Limitations and future work
 
 * **Abstract-level verification only.** A claim can be "supported by the abstract" yet qualified in the full paper. Next step: open-access full-text retrieval (for example via Unpaywall) with passage-level checking.
-* **The Critic can be lenient on connective prose.** In the first live run a synthesis sentence without a citation ("…which has been shown to markedly lower hallucination rates") was accepted. A sentence-level citation check (every factual sentence must cite) would be a stronger deterministic guard.
+* **The Critic can be lenient on connective prose.** In the first live run a synthesis sentence without a citation ("…which has been shown to markedly lower hallucination rates", `evidence/runs/first_live_run/report.md`) was accepted. A sentence-level citation check (every factual sentence must cite) would be a stronger deterministic guard.
 * **Small Critic benchmark.** Twenty-one items and a perfect score indicate a ceiling effect. A larger, harder set (for example LLM-AggreFact; Tang, Laban and Durrett, 2024) would measure the Critic's true error rate.
 * **Self-correction depends on feedback quality** (R15). Richer, structured feedback (cause codes) would let the Planner reason more reliably.
 * **Sequential subtasks.** Subtasks run one at a time for clarity and rate-limit safety. The atomic-claim design already permits parallel workers.

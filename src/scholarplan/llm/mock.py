@@ -121,7 +121,7 @@ class MockLLM:
 
     def _verify_synthesis(self, p: dict[str, Any]) -> dict[str, Any]:
         known = {c["claim_id"] for c in p["claims"]}
-        cited = {int(x) for x in re.findall(r"\[C(\d+)\]", p["synthesis"])}
+        cited = {int(x) for x in re.findall(r"\[\s*C\s*(\d+)\s*\]", p["synthesis"])}
         bad = cited - known
         if bad or (known and not cited):
             return {"label": "unsupported", "reason": f"citations not backed by verified claims: {sorted(bad)}"}

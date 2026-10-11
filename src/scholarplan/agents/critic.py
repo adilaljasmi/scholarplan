@@ -31,7 +31,9 @@ from scholarplan.config import Settings
 from scholarplan.llm import LLMClient, LLMError, call_json
 from scholarplan.llm.schemas import CriticOutput, SynthesisVerdict
 
-CITATION = re.compile(r"\[C(\d+)\]")
+# Tolerates spacing such as "[ C27]": a live synthesis used that form, and the
+# strict pattern left the citation unrendered and unchecked (remediation R20).
+CITATION = re.compile(r"\[\s*C\s*(\d+)\s*\]")
 
 
 def subtask_passes(n_supported: int, n_total: int, min_ratio: float) -> bool:

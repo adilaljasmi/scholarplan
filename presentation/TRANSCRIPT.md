@@ -1,7 +1,7 @@
 # ScholarPlan: presentation narration transcript
 
 **Module:** Intelligent Agents · **Assessment:** Unit 11 individual presentation · **Presenter:** Adil Aljasmi
-**Target length:** 20 minutes (10 slides; narration ≈ 2,380 words; at a steady 125 words per minute plus about 1 minute of on-screen waiting during the live demo this is ≈ 20 minutes)
+**Target length:** 20 minutes (10 slides; narration ≈ 2,490 words, ≈ 20 minutes at a steady 125 words per minute; the demonstration uses screenshots of live runs, so there is no on-screen waiting)
 
 Stage directions are in *[italic brackets]* and are not spoken.
 
@@ -11,7 +11,7 @@ Stage directions are in *[italic brackets]* and are not spoken.
 
 Hello, my name is Adil Aljasmi. This presentation covers the second deliverable of the Intelligent Agents module: the implementation of ScholarPlan.
 
-In Unit 6, our group designed ScholarPlan, an LLM-powered planning agent for academic research and information gathering. In Unit 11 I built that design, individually, as a working multi-agent system. Over the next twenty minutes I will show how the implementation meets the design, demonstrate it running live, explain how it was tested and evaluated against measurable targets, and reflect critically on what worked, what changed, and why.
+In Unit 6, our group designed ScholarPlan, an LLM-powered planning agent for academic research and information gathering. In Unit 11 I built that design, individually, as a working multi-agent system. Over the next twenty minutes I will show how the implementation meets the design, walk through it running on a real research question, explain how it was tested and evaluated against measurable targets, and reflect critically on what worked, what changed, and why.
 
 ---
 
@@ -23,7 +23,7 @@ So ScholarPlan splits the work between five cooperating agents. You give it a re
 
 This maps directly onto the three success criteria in the brief: relevant data is identified and retrieved; it is processed by filtering, summarising and verifying; and it is stored in a usable format.
 
-The numbers on the right summarise where the project ended up. All five agents are implemented. There are 94 automated tests with 93 percent line coverage. And in live evaluation, three out of three research goals completed within the step budget, averaging under seven reasoning steps and about one minute each.
+The numbers on the right summarise where the project ended up. All five agents are implemented. There are 96 automated tests with 92 percent line coverage. And in live evaluation, three out of three research goals completed within the step budget, averaging under seven reasoning steps and about one minute each.
 
 ---
 
@@ -61,43 +61,35 @@ The Unit 6 feedback noted that our design had behavioural diagrams, an activity 
 
 At the top, the Controller aggregates five Agent objects. Agent is an abstract class with two methods: can-act, a cheap side-effect-free trigger check, and act. The five roles inherit from it. Every agent reaches the blackboard only through a ScopedBlackboard, which enforces that role's permissions.
 
-On the right is the dependency-inversion principle at work. The three LLM-using agents depend on an LLMClient interface, not on Groq. There are three implementations: the live OpenAI-compatible client, a deterministic mock and a scripted mock used to force failure paths in tests. Switching provider is a configuration change. That is exactly what made the model changes I will discuss later cheap to make.
+At the bottom left is the dependency-inversion principle at work. The three LLM-using agents depend on an LLMClient interface, not on Groq. There are three implementations: the live OpenAI-compatible client, a deterministic mock and a scripted mock used to force failure paths in tests. Switching provider is a configuration change. That is exactly what made the model changes I will discuss later cheap to make.
 
-At the bottom, the Retriever uses three API clients sharing one polite, cached, rate-limited HTTP component, and all thresholds live in a single frozen Settings object, so the numbers I quote are defined in one place.
+At the bottom right, the Retriever uses three API clients sharing one polite, cached, rate-limited HTTP component, and all thresholds live in a single frozen Settings object, so the numbers I quote are defined in one place.
 
 ---
 
-## Slide 6: Live demonstration *(≈ 4:30)*
+## Slide 6: Demonstration: live runs, step by step *(≈ 4:00)*
 
-*[Switch to the browser showing the dashboard, http://localhost:8501. The sidebar should already show the goal. Turn ON "Demo: inject a fabricated claim". Click "Run agents".]*
+These four panels are captured from real live runs, using the ScholarPlan dashboard. The dashboard reads the SQLite blackboard every second, so what you see is exactly what the agents recorded. The goal for this run was "How do LLM-based critics or verifiers detect hallucinated claims?". I also switched on a clearly labelled demonstration option that plants one false claim, because live runs rarely hallucinate on cue and I wanted to show the Critic catching one.
 
-Let me show the system running. This is the ScholarPlan dashboard, written in Streamlit. The agents run in a background thread while the page reads the same SQLite blackboard every second, so what you see is the blackboard itself.
+*[Panel 1]*
 
-I've entered the goal "How do LLM-based critics or verifiers detect hallucinated claims?", and I've switched on a clearly labelled demo option that plants one false claim. Live runs rarely hallucinate on cue, and I want to show the Critic catching one.
+Panel one is the ReAct loop in action. The Planner's first thought explains how it will decompose the goal: detection methods, training signals, evaluation benchmarks and known limitations. Its action creates a four-subtask plan. At the next step it reasons that it needs evidence first, and issues the first of those subtasks, number five on this shared blackboard. From there the specialists take over through the blackboard. The run's saved summary records that the Retriever collected sixty records from the three APIs, the Processor removed ten duplicates and kept the most relevant sources, and all four subtasks were verified in six of the twenty allowed steps.
 
-*[As the trace fills.]*
+*[Panel 2]*
 
-First, the Planner's thought: it explains how it will decompose the goal, then creates four subtasks. Notice the agent cards: the highlighted card shows who is acting. Now the Retriever is searching arXiv, OpenAlex and Crossref; the observation shows how many records came from each. The Processor reports how many candidates it had, how many duplicates it removed, and how many it selected.
+Panel two is the key moment. Claim C22, the planted one, says the study "eliminates hallucination entirely and improves accuracy by 99 percent on every benchmark". The Critic, a model from a different family than the one that wrote the claims, rejected it, and its reason is precise: the source reports an AUROC of 0.781 and specific percentage improvements, not the elimination of hallucination. The genuine claims from the same abstract, C20 and C21, were accepted. Sixteen of seventeen claims survived, and the false one never reaches the report.
 
-*[When the Critic verdicts appear, click "Claims & verdicts".]*
+*[Panel 3]*
 
-Here is the interesting part. The trace shows a line marked DEMO: the injected claim says the method "eliminates hallucination entirely and improves accuracy by 99 percent on every benchmark". The Critic, running on a different model family, rejected it. Its reason says the source reports an AUROC of 0.781 and specific improvements, not the elimination of hallucination. Opening the claim shows the real abstract underneath, so anyone can audit the judgement.
+Panel three comes from an earlier live evaluation run, where re-planning happened for real. The Processor's model twice failed to return valid output, and each time it wrote feedback to the blackboard. The Planner read that feedback and re-planned twice, and the run still finished with all four subtasks verified, in eight steps. This is also where I found the misdiagnosis problem I will return to under testing.
 
-*[Click "Feedback", then "Subtasks".]*
+*[Panel 4]*
 
-The subtask still passed, because two of its three claims were supported, but the false claim will never reach the report. If too many claims fail, this feedback tab shows the message the Planner reads before re-planning. In an earlier live evaluation run you can see two genuine re-plans recorded here.
+Panel four is the stored result: the Archivist's report, shown after a citation-formatting fix I made while preparing these slides, remediation R20. The content is unchanged, and both versions are in the evidence folder. The report answers the goal with Harvard in-text citations, and each citation keeps its claim identifier, so every cited statement can be traced back to a verified claim and its source. The same run saved a BibTeX file, a searchable vector index and the full trace.
 
-*[When the run finishes, click "Report".]*
+In the code, the logic behind these panels lives in a few places: the ReAct step and its validation in planner.py, the entailment check in critic.py, and the atomic subtask-claiming transaction, claim_subtask, in blackboard.py.
 
-The run is complete. The report has an answer with Harvard in-text citations, an evidence table where every claim has an identifier, the subtasks with their outcomes, and the reference list. There are download buttons for the BibTeX file and the trace, and I can query the saved vector index semantically. Let me type "how are hallucinations scored" and the index returns the closest verified claims.
-
-*[Switch to VS Code. Open src/scholarplan/agents/planner.py and scroll to `_react_step` and `_validate`.]*
-
-Briefly, in the code: this is the ReAct step. Allowed actions are computed here, by code; the LLM's choice is validated here; and if it fails, the fallback policy is used. Every comment explains *why* a decision was made, with its source, rather than restating what the line does.
-
-*[Open blackboard.py at `claim_subtask` for a few seconds, then return to the slides.]*
-
-And this is the atomic claim: one immediate transaction, re-checking the status in the update itself.
+All of the evidence that the system works is in my public GitHub repository, shown at the bottom of the slide. The evidence/runs folder holds the terminal logs, reports, BibTeX files and traces of the live runs, including this one. The evidence/screenshots folder has ten dashboard screenshots, evidence/tests has the full test-suite output with coverage, evidence/evaluation has the benchmark results, and docs/REMEDIATION_LOG.md records every defect found and fixed. Section nine of the README maps each piece of evidence to its file, and the README explains how to run the system yourself.
 
 ---
 
@@ -105,9 +97,9 @@ And this is the atomic claim: one immediate transaction, re-checking the status 
 
 The Unit 6 feedback asked for clear, measurable targets: test queries, deduplication thresholds, and Critic precision and recall. I set these targets before running anything.
 
-First, the Critic. I hand-labelled 21 claim-source pairs: twelve supported, and nine hallucinations of six kinds, including over-generalisation, wrong entities, fabricated numbers, metric shifts and contradictions. The targets were precision of at least 0.85 and recall of at least 0.75. The chart compares three verifiers. A simple word-overlap baseline reaches only 0.83 and misses contradictions and metric shifts, because those reuse the source's own words. The production Critic, Qwen, and the fallback, gpt-oss-120b, both scored 1.0 on precision and recall, catching all nine hallucinations. That comparison is the empirical justification for using an LLM as the judge rather than string matching. I'll be honest about the limit, though: 21 items is small, and a perfect score is more likely a ceiling effect than proof of perfection.
+First, the Critic. I hand-labelled 21 claim-source pairs: twelve supported, and nine hallucinations of seven kinds, including over-generalisation, wrong entities, fabricated numbers, metric shifts and contradictions. The targets were precision of at least 0.85 and recall of at least 0.75. The chart compares three verifiers. A simple word-overlap baseline reaches only 0.83 and misses contradictions and metric shifts, because those reuse the source's own words. The production Critic, Qwen, and the fallback, gpt-oss-120b, both scored 1.0 on precision and recall, catching all nine hallucinations. That comparison is the empirical justification for using an LLM as the judge rather than string matching. I'll be honest about the limit, though: 21 items is small, and a perfect score is more likely a ceiling effect than proof of perfection.
 
-Second, retrieval. I used ten fixed queries whose target papers are the ones our own Unit 6 report cited, in effect asking whether ScholarPlan can find the literature its design relied on. Recall was 0.9 against a target of 0.75. No single API found everything: arXiv found seven, OpenAlex six and Crossref one, which supports the decision to query all three. The one miss, Hayes-Roth 1985, has no indexed abstract, and the system deliberately excludes records it cannot verify. That is a real trade-off: verifiability versus coverage of older work.
+Second, retrieval. I used ten fixed queries whose target papers are the ones our own Unit 6 report cited, in effect asking whether ScholarPlan can find the literature its design relied on. Recall was 0.9 against a target of 0.75. No single API found everything: arXiv found eight, OpenAlex six and Crossref one, which supports the decision to query all three. The one miss, Hayes-Roth 1985, has no indexed abstract, and the system deliberately excludes records it cannot verify. That is a real trade-off: verifiability versus coverage of older work.
 
 Third, end-to-end. Three fixed goals, live: all three completed within the twenty-step budget, using 6.7 steps and under a minute on average, and about 21,000 tokens per run, comfortably inside the free tier.
 
@@ -117,13 +109,13 @@ The deduplication and relevance thresholds, 0.92 and 0.30 cosine similarity, are
 
 ## Slide 8: Testing, remediation and development progress *(≈ 2:00)*
 
-Testing followed the Unit 6 plan of testing by agent type. Deterministic components have conventional unit tests: 82 of them, covering blackboard atomicity and permissions, API parsers run against recorded real responses, rate limiting and retries, the thresholds, Planner rules and citation formatting. Twelve functional tests run the whole system end to end, offline, and each one forces a specific behaviour: Critic rejection leading to re-planning, the three-re-plan cap, budget exhaustion, an injected hallucination being filtered, and an API failing mid-run. Four live smoke tests detect drift in the external services. Overall: 94 passing tests and 93 percent line coverage.
+Testing followed the Unit 6 plan of testing by agent type. Deterministic components have conventional unit tests: 84 of them, covering blackboard atomicity and permissions, API parsers run against recorded real responses, rate limiting and retries, the thresholds, Planner rules and citation formatting. Twelve functional tests run the whole system end to end, offline, and each one forces a specific behaviour: Critic rejection leading to re-planning, the three-re-plan cap, budget exhaustion, an injected hallucination being filtered, and an API failing mid-run. Four live smoke tests detect drift in the external services. Overall: 96 passing tests and 92 percent line coverage.
 
 The scripted mock LLM is what makes this possible: a real model will not reject claims on demand, but a scripted one can, deterministically.
 
-Every defect is recorded in a remediation log, nineteen in total, each with its root cause, fix and verifying test. Three stand out. The Critic model chosen in Unit 6 was withdrawn by the provider, so I added an automatic model-substitution mechanism and a regression test. OpenAlex returned "too many requests" errors in the first live run, so the client now honours the server's retry-after header. And most interesting: in a live run, the Planner misdiagnosed a model formatting error as a bad query and rewrote a perfectly good query, because the feedback message did not state the cause. The lesson is that Reflexion-style self-correction is only as good as its feedback signal, so feedback now carries the diagnosis.
+Every defect is recorded in a remediation log, twenty in total, each with its root cause, fix and verifying test. Three stand out. The Critic model chosen in Unit 6 was withdrawn by the provider, so I added an automatic model-substitution mechanism and a regression test. OpenAlex returned "too many requests" errors in the first live run, so the client now honours the server's retry-after header. And most interesting: in a live run, the Planner misdiagnosed a model formatting error as a bad query and rewrote a perfectly good query, because the feedback message did not state the cause. The lesson is that Reflexion-style self-correction is only as good as its feedback signal, so feedback now carries the diagnosis.
 
-Progress is visible in the Git history: from the Unit 6 design, through seven short sprints, each ending in a tested increment.
+Progress is visible in the Git history: from the Unit 6 design, through eight short sprints, Sprint 0 to Sprint 7, each ending in a tested increment.
 
 ---
 
