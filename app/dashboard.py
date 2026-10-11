@@ -106,7 +106,7 @@ with st.sidebar:
     st.title("🧭 ScholarPlan")
     st.caption("LLM-powered multi-agent planning for academic research")
     goal = st.text_area("Research goal", height=100,
-                        value="How does verifying LLM outputs against retrieved sources reduce hallucination?")
+                        value="How do LLM-based critics or verifiers detect hallucinated claims?")
     has_key = bool(settings0.groq_api_key)
     backend = st.radio("LLM backend", ["groq", "mock"], index=0 if has_key else 1, horizontal=True,
                        help="groq = live models (needs GROQ_API_KEY). mock = deterministic offline rules.")

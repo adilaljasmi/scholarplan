@@ -11,8 +11,13 @@ the ReAct loop (Thought -> Action -> Observation) and of agent interaction.
 from __future__ import annotations
 
 import argparse
+import os
 import subprocess
 import sys
+import threading
+import time
+import urllib.request
+import webbrowser
 from pathlib import Path
 
 COLOURS = {"planner": "\033[94m", "retriever": "\033[92m", "processor": "\033[95m",
@@ -83,9 +88,33 @@ def cmd_search(args: argparse.Namespace) -> int:
     return 0
 
 
+def _open_when_ready(url: str, timeout_s: float = 60.0) -> None:
+    """Open the browser only once the server answers, so the first page load never fails."""
+    deadline = time.monotonic() + timeout_s
+    while time.monotonic() < deadline:
+        try:
+            urllib.request.urlopen(url, timeout=2)
+            webbrowser.open(url)
+            return
+        except OSError:
+            time.sleep(0.5)
+
+
 def cmd_ui(_: argparse.Namespace) -> int:
     app = Path(__file__).resolve().parents[2] / "app" / "dashboard.py"
-    return subprocess.call([sys.executable, "-m", "streamlit", "run", str(app)])
+    url = "http://localhost:8501"
+    # Headless mode skips Streamlit's first-run e-mail prompt, which otherwise
+    # blocks the terminal until Enter is pressed (it looked like a hang when
+    # the README instructions were first followed); we open the browser here.
+    if not os.environ.get("SCHOLARPLAN_NO_BROWSER"):
+        threading.Thread(target=_open_when_ready, args=(url,), daemon=True).start()
+    print(f"ScholarPlan dashboard: {url}   (press Ctrl+C here to stop it)", flush=True)
+    # Bind to localhost only: the dashboard can start runs that spend the
+    # user's API quota, so it must not be reachable from the local network.
+    return subprocess.call([sys.executable, "-m", "streamlit", "run", str(app),
+                            "--server.headless", "true", "--server.port", "8501",
+                            "--server.address", "localhost",
+                            "--browser.gatherUsageStats", "false"])
 
 
 def main(argv: list[str] | None = None) -> int:
