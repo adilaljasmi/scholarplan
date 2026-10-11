@@ -1,0 +1,503 @@
+{
+  "run_at": "2026-10-11T19:00:12",
+  "targets": {
+    "precision": 0.85,
+    "recall": 0.75
+  },
+  "n_items": 21,
+  "models": {
+    "lexical-baseline (mock)": {
+      "precision": 0.833,
+      "recall": 0.833,
+      "hallucinations_caught": "7/9",
+      "accuracy": 0.81,
+      "tp": 10,
+      "fp": 2,
+      "fn": 2,
+      "tn": 7,
+      "seconds": 0.0,
+      "errors": [],
+      "met": false,
+      "errors_by_type": [
+        "contradiction",
+        "metric shift",
+        "paraphrase"
+      ],
+      "items": [
+        {
+          "id": 1,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.92 (>= 0.80)"
+        },
+        {
+          "id": 2,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.89 (>= 0.80)"
+        },
+        {
+          "id": 3,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.86 (>= 0.80)"
+        },
+        {
+          "id": 4,
+          "type": "over-generalisation",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.62 (< 0.80)"
+        },
+        {
+          "id": 5,
+          "type": "wrong entity",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.50 (< 0.80)"
+        },
+        {
+          "id": 6,
+          "type": "contradiction",
+          "gold": "unsupported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.83 (>= 0.80)"
+        },
+        {
+          "id": 7,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.92 (>= 0.80)"
+        },
+        {
+          "id": 8,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.87 (>= 0.80)"
+        },
+        {
+          "id": 9,
+          "type": "number",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 1.00 (>= 0.80)"
+        },
+        {
+          "id": 10,
+          "type": "metric shift",
+          "gold": "unsupported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.89 (>= 0.80)"
+        },
+        {
+          "id": 11,
+          "type": "contradiction",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.57 (< 0.80)"
+        },
+        {
+          "id": 12,
+          "type": "number",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.93 (>= 0.80)"
+        },
+        {
+          "id": 13,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.88 (>= 0.80)"
+        },
+        {
+          "id": 14,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 0.94 (>= 0.80)"
+        },
+        {
+          "id": 15,
+          "type": "fabricated number",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.50 (< 0.80)"
+        },
+        {
+          "id": 16,
+          "type": "fabricated contribution",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.44 (< 0.80)"
+        },
+        {
+          "id": 17,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.79 (< 0.80)"
+        },
+        {
+          "id": 18,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "lexical overlap 1.00 (>= 0.80)"
+        },
+        {
+          "id": 19,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.77 (< 0.80)"
+        },
+        {
+          "id": 20,
+          "type": "wrong entity",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.33 (< 0.80)"
+        },
+        {
+          "id": 21,
+          "type": "unsupported comparison",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "lexical overlap 0.64 (< 0.80)"
+        }
+      ]
+    },
+    "qwen/qwen3.8-27b (production)": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "hallucinations_caught": "9/9",
+      "accuracy": 1.0,
+      "tp": 12,
+      "fp": 0,
+      "fn": 0,
+      "tn": 9,
+      "seconds": 40.4,
+      "errors": [],
+      "met": true,
+      "errors_by_type": [],
+      "items": [
+        {
+          "id": 1,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text explicitly states that the paper explores using LLMs to generate both reasoning traces and task-specific actions in an interleaved manner, naming this approach ReAct."
+        },
+        {
+          "id": 2,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text states that on HotpotQA and Fever, ReAct overcomes issues by interacting with a simple Wikipedia API."
+        },
+        {
+          "id": 3,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text states that actions allow the model to interface with external sources, such as knowledge bases or environments, to gather additional information."
+        },
+        {
+          "id": 4,
+          "type": "over-generalisation",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text says ReAct 'overcomes issues of hallucination' on specific benchmarks (HotpotQA and Fever), not that it eliminates hallucination entirely on all question answering benchmarks."
+        },
+        {
+          "id": 5,
+          "type": "wrong entity",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text lists HotpotQA, Fever, ALFWorld, and WebShop as the benchmarks used, but does not mention MMLU or GSM8K."
+        },
+        {
+          "id": 6,
+          "type": "contradiction",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text states ReAct was prompted with 'only one or two in-context examples', which contradicts the claim of 'more than ten'."
+        },
+        {
+          "id": 7,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text explicitly states that on ALFWorld and WebShop, ReAct was prompted with only one or two in-context examples."
+        },
+        {
+          "id": 8,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text explicitly states that Pre-Act enhances performance by 'creating a multi-step execution plan along with the detailed reasoning for the given user input'."
+        },
+        {
+          "id": 9,
+          "type": "number",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text states: 'Our turn-level evaluation, averaged across five models, shows that our approach, Pre-Act, outperforms ReAct by 70% in Action Recall on the Almita dataset.'"
+        },
+        {
+          "id": 10,
+          "type": "metric shift",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text attributes the 70% improvement to 'Action Recall' at the 'turn level', not 'end-to-end goal completion'. Additionally, the claim says 'every dataset', while the text specifies the 'Almita dataset'."
+        },
+        {
+          "id": 11,
+          "type": "contradiction",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text states: 'Our approach is applicable to both conversational and non-conversational agents,' which contradicts the claim that it can *only* be applied to conversational agents."
+        },
+        {
+          "id": 12,
+          "type": "number",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text states: 'Our experiments show that the fine-tuned 70B model... achieving... a 28% improvement in goal completion rate (end-to-end) on the Almita (out-of-domain) dataset.'"
+        },
+        {
+          "id": 13,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text explicitly states that 'deep learning based generation is prone to hallucinate unintended text'."
+        },
+        {
+          "id": 14,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text lists these exact five tasks (abstractive summarization, dialogue generation, generative question answering, data-to-text generation, and machine translation) as the downstream tasks covered in the survey."
+        },
+        {
+          "id": 15,
+          "type": "fabricated number",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text does not mention any specific statistics, rates, or changes in hallucination rates since 2020."
+        },
+        {
+          "id": 16,
+          "type": "fabricated contribution",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text describes the survey as providing an overview of existing research, metrics, and methods, but does not state that it introduces a new benchmark dataset."
+        },
+        {
+          "id": 17,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text states that studies on measuring and mitigating hallucinated texts 'have never been reviewed in a comprehensive manner before'."
+        },
+        {
+          "id": 18,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text explicitly lists 'the cognitive-servo approach and the hierarchical-controller approach' as the two control paradigms used with blackboard systems."
+        },
+        {
+          "id": 19,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "The source text states that 'Issues of time scales, real-time responsiveness, and hierarchical control are considered' in the context of applying blackboard architectures to control problems."
+        },
+        {
+          "id": 20,
+          "type": "wrong entity",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text discusses control problems and paradigms but makes no mention of LLM agents or a comparison with centralised orchestration."
+        },
+        {
+          "id": 21,
+          "type": "unsupported comparison",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "The source text mentions both approaches but does not compare their speed or state that one is faster than the other."
+        }
+      ]
+    },
+    "openai/gpt-oss-120b (fallback)": {
+      "precision": 1.0,
+      "recall": 1.0,
+      "hallucinations_caught": "9/9",
+      "accuracy": 1.0,
+      "tp": 12,
+      "fp": 0,
+      "fn": 0,
+      "tn": 9,
+      "seconds": 7.3,
+      "errors": [],
+      "met": true,
+      "errors_by_type": [],
+      "items": [
+        {
+          "id": 1,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source states LLMs generate reasoning traces and task-specific actions in an interleaved manner."
+        },
+        {
+          "id": 2,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source explicitly says ReAct interacts with a simple Wikipedia API on HotpotQA and Fever."
+        },
+        {
+          "id": 3,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source notes actions let the model interface with external sources like knowledge bases to gather information."
+        },
+        {
+          "id": 4,
+          "type": "over-generalisation",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source mentions reducing hallucination on HotpotQA, not eliminating it entirely on all QA benchmarks."
+        },
+        {
+          "id": 5,
+          "type": "wrong entity",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source does not mention evaluation on MMLU or GSM8K."
+        },
+        {
+          "id": 6,
+          "type": "contradiction",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source says ReAct was prompted with only one or two in-context examples, not more than ten."
+        },
+        {
+          "id": 7,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source confirms prompting with only one or two in-context examples for ALFWorld and WebShop."
+        },
+        {
+          "id": 8,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source states Pre-Act creates a multi-step execution plan with detailed reasoning for user input."
+        },
+        {
+          "id": 9,
+          "type": "number",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source explicitly reports a 70% Action Recall improvement over ReAct averaged across five models on Almita."
+        },
+        {
+          "id": 10,
+          "type": "metric shift",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source mentions 70% improvement in Action Recall, not end-to-end goal completion, and only on Almita, not every dataset."
+        },
+        {
+          "id": 11,
+          "type": "contradiction",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source says Pre-Act applies to both conversational and non-conversational agents, not only conversational."
+        },
+        {
+          "id": 12,
+          "type": "number",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source reports a 28% improvement in goal completion rate (end-to-end) for the fine-tuned 70B model on Almita."
+        },
+        {
+          "id": 13,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source states deep learning based generation is prone to hallucinate unintended text."
+        },
+        {
+          "id": 14,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source lists the same five downstream tasks as covered."
+        },
+        {
+          "id": 15,
+          "type": "fabricated number",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source makes no mention of hallucination rates or changes since 2020."
+        },
+        {
+          "id": 16,
+          "type": "fabricated contribution",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source does not mention introducing a new benchmark dataset."
+        },
+        {
+          "id": 17,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source says prior studies had never been reviewed comprehensively before this survey."
+        },
+        {
+          "id": 18,
+          "type": "detail",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source lists the two paradigms exactly as claimed"
+        },
+        {
+          "id": 19,
+          "type": "paraphrase",
+          "gold": "supported",
+          "pred": "supported",
+          "reason": "Source states real-time responsiveness is an issue considered"
+        },
+        {
+          "id": 20,
+          "type": "wrong entity",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source makes no claim about outperforming centralized orchestration or LLM agents"
+        },
+        {
+          "id": 21,
+          "type": "unsupported comparison",
+          "gold": "unsupported",
+          "pred": "unsupported",
+          "reason": "Source does not compare speed of the two approaches"
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,124 @@
+{
+  "run_at": "2026-10-11T19:01:10",
+  "recall": 0.9,
+  "target": 0.75,
+  "met": true,
+  "queries": [
+    {
+      "id": "Q1",
+      "query": "ReAct synergizing reasoning and acting in language models",
+      "cites": "Yao et al., 2023",
+      "hit": true,
+      "found_by": [
+        "arxiv"
+      ],
+      "records": 11,
+      "duplicates_removed": 0
+    },
+    {
+      "id": "Q2",
+      "query": "Reflexion language agents verbal reinforcement learning",
+      "cites": "Shinn et al., 2023",
+      "hit": true,
+      "found_by": [
+        "arxiv",
+        "openalex"
+      ],
+      "records": 13,
+      "duplicates_removed": 1
+    },
+    {
+      "id": "Q3",
+      "query": "survey of hallucination in natural language generation",
+      "cites": "Ji et al., 2023",
+      "hit": true,
+      "found_by": [
+        "arxiv",
+        "openalex",
+        "crossref"
+      ],
+      "records": 15,
+      "duplicates_removed": 6
+    },
+    {
+      "id": "Q4",
+      "query": "Sentence-BERT sentence embeddings using siamese BERT networks",
+      "cites": "Reimers and Gurevych, 2019",
+      "hit": true,
+      "found_by": [
+        "arxiv",
+        "openalex"
+      ],
+      "records": 15,
+      "duplicates_removed": 4
+    },
+    {
+      "id": "Q5",
+      "query": "retrieval-augmented generation for knowledge-intensive NLP tasks",
+      "cites": "Lewis et al., 2020",
+      "hit": true,
+      "found_by": [
+        "arxiv"
+      ],
+      "records": 15,
+      "duplicates_removed": 3
+    },
+    {
+      "id": "Q6",
+      "query": "OpenAlex fully open index of scholarly works authors venues",
+      "cites": "Priem, Piwowar and Orr, 2022",
+      "hit": true,
+      "found_by": [
+        "arxiv",
+        "openalex"
+      ],
+      "records": 14,
+      "duplicates_removed": 3
+    },
+    {
+      "id": "Q7",
+      "query": "large language models can be easily distracted by irrelevant context",
+      "cites": "Shi et al., 2023",
+      "hit": true,
+      "found_by": [
+        "arxiv",
+        "openalex"
+      ],
+      "records": 15,
+      "duplicates_removed": 2
+    },
+    {
+      "id": "Q8",
+      "query": "LLMs can't plan but can help planning in LLM-Modulo frameworks",
+      "cites": "Kambhampati et al., 2024",
+      "hit": true,
+      "found_by": [
+        "openalex"
+      ],
+      "records": 10,
+      "duplicates_removed": 0
+    },
+    {
+      "id": "Q9",
+      "query": "chain-of-thought prompting elicits reasoning in large language models",
+      "cites": "Wei et al., 2022",
+      "hit": true,
+      "found_by": [
+        "arxiv"
+      ],
+      "records": 15,
+      "duplicates_removed": 1
+    },
+    {
+      "id": "Q10",
+      "query": "blackboard architecture for control",
+      "cites": "Hayes-Roth, 1985",
+      "hit": false,
+      "found_by": [],
+      "records": 15,
+      "duplicates_removed": 0
+    }
+  ],
+  "dedup_threshold": 0.92,
+  "relevance_floor": 0.3
+}

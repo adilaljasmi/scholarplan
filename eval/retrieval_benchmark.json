@@ -1,0 +1,16 @@
+{
+  "description": "Fixed retrieval queries with a known relevant work (Unit 6 feedback #2: 'clear, measurable targets, including the test queries'). The targets are papers cited in the Unit 6 design report, so the test asks: can ScholarPlan find the literature its own design relied on? A hit means the work appears among the records returned by arXiv, OpenAlex and Crossref (5 per API) for the query.",
+  "targets": {"recall": 0.75},
+  "queries": [
+    {"id": "Q1", "query": "ReAct synergizing reasoning and acting in language models", "expect": ["2210.03629", "10.48550/arxiv.2210.03629"], "cites": "Yao et al., 2023"},
+    {"id": "Q2", "query": "Reflexion language agents verbal reinforcement learning", "expect": ["2303.11366", "10.48550/arxiv.2303.11366"], "cites": "Shinn et al., 2023"},
+    {"id": "Q3", "query": "survey of hallucination in natural language generation", "expect": ["10.1145/3571730", "2202.03629"], "cites": "Ji et al., 2023"},
+    {"id": "Q4", "query": "Sentence-BERT sentence embeddings using siamese BERT networks", "expect": ["1908.10084", "10.18653/v1/d19-1410"], "cites": "Reimers and Gurevych, 2019"},
+    {"id": "Q5", "query": "retrieval-augmented generation for knowledge-intensive NLP tasks", "expect": ["2005.11401", "10.48550/arxiv.2005.11401"], "cites": "Lewis et al., 2020"},
+    {"id": "Q6", "query": "OpenAlex fully open index of scholarly works authors venues", "expect": ["2205.01833", "10.48550/arxiv.2205.01833"], "cites": "Priem, Piwowar and Orr, 2022"},
+    {"id": "Q7", "query": "large language models can be easily distracted by irrelevant context", "expect": ["2302.00093", "10.48550/arxiv.2302.00093"], "cites": "Shi et al., 2023"},
+    {"id": "Q8", "query": "LLMs can't plan but can help planning in LLM-Modulo frameworks", "expect": ["2402.01817", "10.48550/arxiv.2402.01817"], "cites": "Kambhampati et al., 2024"},
+    {"id": "Q9", "query": "chain-of-thought prompting elicits reasoning in large language models", "expect": ["2201.11903", "10.48550/arxiv.2201.11903"], "cites": "Wei et al., 2022"},
+    {"id": "Q10", "query": "blackboard architecture for control", "expect": ["10.1016/0004-3702(85)90063-3"], "cites": "Hayes-Roth, 1985"}
+  ]
+}

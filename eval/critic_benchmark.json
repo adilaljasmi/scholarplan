@@ -1,0 +1,27 @@
+{
+  "description": "Hand-labelled claim/source pairs for measuring the Critic (Unit 6 feedback #2). Sources are the recorded API fixtures in tests/fixtures. 'supported' is the positive class. Unsupported claims cover the typical hallucination types: over-generalisation, wrong entity, fabricated number, metric shift, contradiction and fabricated contribution.",
+  "targets": {"precision": 0.85, "recall": 0.75},
+  "items": [
+    {"id": 1,  "source": "arxiv_react.xml#0", "label": "supported",   "type": "paraphrase",        "claim": "ReAct prompts LLMs to generate reasoning traces and task-specific actions in an interleaved manner."},
+    {"id": 2,  "source": "arxiv_react.xml#0", "label": "supported",   "type": "detail",            "claim": "On HotpotQA and Fever, ReAct interacts with a simple Wikipedia API."},
+    {"id": 3,  "source": "arxiv_react.xml#0", "label": "supported",   "type": "paraphrase",        "claim": "In ReAct, actions let the model gather additional information from external sources such as knowledge bases."},
+    {"id": 4,  "source": "arxiv_react.xml#0", "label": "unsupported", "type": "over-generalisation", "claim": "ReAct eliminates hallucination entirely on all question answering benchmarks."},
+    {"id": 5,  "source": "arxiv_react.xml#0", "label": "unsupported", "type": "wrong entity",      "claim": "ReAct was evaluated on the MMLU and GSM8K benchmarks."},
+    {"id": 6,  "source": "arxiv_react.xml#0", "label": "unsupported", "type": "contradiction",     "claim": "On ALFWorld and WebShop, ReAct was prompted with more than ten in-context examples."},
+    {"id": 7,  "source": "arxiv_react.xml#0", "label": "supported",   "type": "detail",            "claim": "On ALFWorld and WebShop, ReAct was prompted with only one or two in-context examples."},
+    {"id": 8,  "source": "arxiv_react.xml#2", "label": "supported",   "type": "paraphrase",        "claim": "Pre-Act creates a multi-step execution plan together with detailed reasoning for the user input."},
+    {"id": 9,  "source": "arxiv_react.xml#2", "label": "supported",   "type": "number",            "claim": "Averaged across five models, Pre-Act outperforms ReAct by 70% in Action Recall on the Almita dataset."},
+    {"id": 10, "source": "arxiv_react.xml#2", "label": "unsupported", "type": "metric shift",      "claim": "Pre-Act outperforms ReAct by 70% in end-to-end goal completion on every dataset."},
+    {"id": 11, "source": "arxiv_react.xml#2", "label": "unsupported", "type": "contradiction",     "claim": "Pre-Act can only be applied to conversational agents."},
+    {"id": 12, "source": "arxiv_react.xml#2", "label": "supported",   "type": "number",            "claim": "A fine-tuned 70B model using Pre-Act achieved a 28% improvement in goal completion rate on the Almita dataset."},
+    {"id": 13, "source": "crossref_hallucination.json#0", "label": "supported",   "type": "paraphrase", "claim": "Deep learning based text generation is prone to hallucinating unintended text."},
+    {"id": 14, "source": "crossref_hallucination.json#0", "label": "supported",   "type": "detail",     "claim": "The survey covers hallucination in abstractive summarization, dialogue generation, generative question answering, data-to-text generation and machine translation."},
+    {"id": 15, "source": "crossref_hallucination.json#0", "label": "unsupported", "type": "fabricated number", "claim": "The survey reports that hallucination rates in NLG systems have halved since 2020."},
+    {"id": 16, "source": "crossref_hallucination.json#0", "label": "unsupported", "type": "fabricated contribution", "claim": "The survey introduces a new benchmark dataset for measuring hallucination."},
+    {"id": 17, "source": "crossref_hallucination.json#0", "label": "supported",   "type": "paraphrase", "claim": "Before this survey, studies on measuring and mitigating hallucinated text had not been reviewed comprehensively."},
+    {"id": 18, "source": "openalex_blackboard.json#0", "label": "supported",   "type": "detail",          "claim": "Two control paradigms used with blackboard systems are the cognitive-servo approach and the hierarchical-controller approach."},
+    {"id": 19, "source": "openalex_blackboard.json#0", "label": "supported",   "type": "paraphrase",      "claim": "Real-time responsiveness is one of the issues considered when applying blackboard architectures to control problems."},
+    {"id": 20, "source": "openalex_blackboard.json#0", "label": "unsupported", "type": "wrong entity",    "claim": "The paper shows that blackboard architectures outperform centralised orchestration for LLM agents."},
+    {"id": 21, "source": "openalex_blackboard.json#0", "label": "unsupported", "type": "unsupported comparison", "claim": "The paper finds that the hierarchical-controller approach is faster than the cognitive-servo approach."}
+  ]
+}
