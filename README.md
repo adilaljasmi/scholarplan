@@ -341,7 +341,7 @@ The baseline misses contradictions and metric shifts that reuse the source's wor
 | Test-suite output, JUnit XML, coverage | `evidence/tests/` |
 | Evaluation results (JSON) | `evidence/evaluation/` |
 | Development history | `git log` (sprint-tagged commits) and `docs/REMEDIATION_LOG.md` |
-| Presentation (10 slides, speaker notes) and narration transcript | `presentation/ScholarPlan_Unit11_Presentation.pptx`, `presentation/ScholarPlan_Narration_Transcript.docx` (source: `presentation/TRANSCRIPT.md`) |
+| Presentation (10 slides, recorded narration) and narration transcript | Submitted as separate files; un-narrated copies are kept in the GitHub repository under `presentation/` (transcript source: `presentation/TRANSCRIPT.md`) |
 
 ---
 
