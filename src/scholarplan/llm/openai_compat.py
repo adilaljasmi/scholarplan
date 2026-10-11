@@ -20,7 +20,8 @@ from scholarplan.llm.base import LLMError, Usage
 class OpenAICompatibleClient:
     def __init__(self, base_url: str, api_key: str, timeout_s: float = 90.0,
                  min_interval_s: float = 2.1, max_retries: int = 4,
-                 transport: httpx.BaseTransport | None = None):
+                 transport: httpx.BaseTransport | None = None,
+                 fallbacks: dict[str, str] | None = None):
         if not api_key:
             raise LLMError("No API key configured. Put GROQ_API_KEY in .env or use --llm mock.")
         self.client = httpx.Client(base_url=base_url, timeout=timeout_s, transport=transport,
@@ -32,6 +33,11 @@ class OpenAICompatibleClient:
         self.max_retries = max_retries
         self._last_call: dict[str, float] = {}
         self._lock = threading.Lock()
+        # Model substitutions used when a provider withdraws a model (404).
+        # Free tiers change without notice; degrading to a known-good model
+        # keeps a demo alive, and the switch is recorded in ``substitutions``.
+        self.fallbacks = dict(fallbacks or {})
+        self.substitutions: dict[str, str] = {}
 
     def _throttle(self, model: str) -> None:
         with self._lock:
@@ -42,6 +48,7 @@ class OpenAICompatibleClient:
 
     def complete(self, *, task: str, model: str, system: str, user: str,
                  temperature: float, json_mode: bool = True) -> str:
+        model = self.substitutions.get(model, model)
         body: dict = {
             "model": model,
             "messages": [{"role": "system", "content": system}, {"role": "user", "content": user}],
@@ -81,6 +88,11 @@ class OpenAICompatibleClient:
                 # output was not valid JSON; retrying usually succeeds.
                 last = "provider JSON validation failed"
                 continue
+            if resp.status_code == 404 and "model_not_found" in resp.text and model in self.fallbacks:
+                substitute = self.fallbacks[model]
+                self.substitutions[model] = substitute
+                return self.complete(task=task, model=substitute, system=system, user=user,
+                                     temperature=temperature, json_mode=json_mode)
             if resp.status_code >= 400:
                 raise LLMError(f"{task}: HTTP {resp.status_code}: {resp.text[:300]}")
             data = resp.json()

@@ -28,7 +28,14 @@ class ModelConfig:
     the design named GPT-5-mini on Azure for the Planner and Processor. No Azure
     subscription was available, so the OpenAI open-weight gpt-oss family is
     served through Groq's free tier instead. The Critic keeps exactly the model
-    the design chose, Llama-3.3-70B-Instruct (Dubey et al., 2024).
+    the design chose Llama-3.3-70B-Instruct (Dubey et al., 2024) for the Critic,
+    but Groq no longer offers it to new free accounts (HTTP 404 on 11 Oct 2026,
+    see docs/REMEDIATION_LOG.md). The Critic therefore uses Qwen, which keeps
+    the property that actually mattered in the design: the verifier comes
+    from a *different model family* than the generator, so it does not share
+    the generator's blind spots (Kambhampati et al., 2024). Qwen is a preview
+    model on Groq, so ``critic_fallback`` is used automatically if it is
+    withdrawn.
     The Planner and Processor use different sizes of the same family because
     Groq meters tokens per model; splitting them doubles usable throughput,
     mirroring the design's GPT-5-mini / GPT-5-nano split.
@@ -36,7 +43,8 @@ class ModelConfig:
 
     planner: str = "openai/gpt-oss-120b"
     processor: str = "openai/gpt-oss-20b"
-    critic: str = "llama-3.3-70b-versatile"
+    critic: str = "qwen/qwen3.8-27b"
+    critic_fallback: str = "openai/gpt-oss-120b"
 
 
 @dataclass(frozen=True)

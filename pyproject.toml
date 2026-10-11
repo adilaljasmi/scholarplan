@@ -33,6 +33,7 @@ packages = ["src/scholarplan"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+pythonpath = ["."]
 addopts = "-ra"
 markers = [
     "live: calls real external services (Groq, arXiv, OpenAlex, Crossref); skipped unless --live is given",
