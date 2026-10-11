@@ -1,0 +1,17 @@
+# Secrets: the Groq key must never be committed (professional/legal responsibility)
+.env
+
+# Python / tooling
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+
+# Runtime artefacts (each run writes here; curated copies live in evidence/)
+output/
+.cache/
+*.db-wal
+*.db-shm
