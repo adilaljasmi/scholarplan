@@ -45,6 +45,8 @@ cp .env.example .env        # then paste your free Groq key after GROQ_API_KEY=
                             # (create one at https://console.groq.com -> API Keys; no card required)
 ```
 
+> Run every command from inside the `scholarplan` folder. If your shell says `uv` is not recognised, `pip` installed it into a folder that is not on your PATH (common with per-user Python on Windows). Use `python -m uv` instead, or `py -m uv` on Windows: for example `py -m uv run scholarplan ui`.
+
 | Task | Command |
 |---|---|
 | Run the agents from the terminal (live models) | `uv run scholarplan run "How does verifying LLM outputs against retrieved sources reduce hallucination?"` |
@@ -285,7 +287,7 @@ $ uv run pytest tests/live --live
 
 Full outputs are in [`evidence/tests/`](evidence/tests/) (console log, JUnit XML, coverage report).
 
-**Remediation.** All 18 defects found during development are documented in [`docs/REMEDIATION_LOG.md`](docs/REMEDIATION_LOG.md), each with how it was found, its root cause, the fix and the verifying test. Highlights:
+**Remediation.** All 19 defects found during development are documented in [`docs/REMEDIATION_LOG.md`](docs/REMEDIATION_LOG.md), each with how it was found, its root cause, the fix and the verifying test. Highlights:
 * **R8**: the planned Critic model was withdrawn by the provider. Fixed by a substitution mechanism plus a regression test.
 * **R10**: OpenAlex `429` errors in the first live run. Fixed by honouring `Retry-After`, with request spacing raised to 1 s.
 * **R15**: in a live run the Planner **misdiagnosed** a model-format failure as a bad query, because the feedback message lacked the cause. Feedback now carries the diagnosis. This is a lesson about Reflexion-style systems: self-correction is only as good as the feedback signal.
