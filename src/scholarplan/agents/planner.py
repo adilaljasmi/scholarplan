@@ -38,6 +38,13 @@ from scholarplan.sources.records import keywords
 
 IN_FLIGHT = frozenset({"open", "retrieving", "retrieved", "processing", "processed", "verifying"})
 SOURCES = ("arxiv", "openalex", "crossref")
+_DASHES = str.maketrans({"‐": "-", "‑": "-", "‒": "-", "–": "-", "—": " "})
+
+
+def clean_query(q: str) -> str:
+    """gpt-oss emits non-breaking hyphens (U+2011); arXiv's tokenizer and our
+    keyword extraction treat them as separators, so normalise to ASCII (R16)."""
+    return " ".join(q.translate(_DASHES).split())
 
 
 def coverage(subtasks: list[dict[str, Any]]) -> float:
@@ -154,7 +161,7 @@ class PlannerAgent(Agent):
         seen: set[str] = set()
         created = []
         for it in items:
-            q = it.query.strip()
+            q = clean_query(it.query)
             if q.lower() in seen:
                 continue  # duplicate subtasks waste budget
             seen.add(q.lower())
@@ -242,7 +249,7 @@ class PlannerAgent(Agent):
             sb.set_subtask_status(d.subtask_id, "open")
             desc = f"issue_subtask {d.subtask_id}"
         elif d.action == "refine_subtask":
-            q = d.query.strip()
+            q = clean_query(d.query)
             self.query_history.setdefault(d.subtask_id, []).append(q)
             sb.set_subtask_status(d.subtask_id, "open", query=q, bump_attempt=True, strategy="all")
             sb.consume_feedback(fb_ids)

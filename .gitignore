@@ -16,3 +16,7 @@ output/
 *.db-wal
 *.db-shm
 *.log
+
+# Never commit secrets in any form
+*api_key*
+*.key

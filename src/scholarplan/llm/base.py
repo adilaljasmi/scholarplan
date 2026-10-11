@@ -97,6 +97,10 @@ def call_json(client: LLMClient, schema: type[T], *, task: str, model: str, syst
                               temperature=temperature, json_mode=True)
         try:
             return schema.model_validate(extract_json(raw))
-        except (json.JSONDecodeError, ValidationError, TypeError) as exc:
+        except ValidationError as exc:
+            # Name the offending field(s); "1 validation error" alone gives the
+            # model nothing to correct (remediation R15).
+            last_error = "; ".join(f"{'.'.join(map(str, e['loc']))}: {e['msg']}" for e in exc.errors()[:3])
+        except (json.JSONDecodeError, TypeError) as exc:
             last_error = str(exc).splitlines()[0][:300] if str(exc) else type(exc).__name__
     raise LLMError(f"{task}: no valid {schema.__name__} after {max_retries} attempts ({last_error})")

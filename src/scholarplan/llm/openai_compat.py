@@ -83,10 +83,15 @@ class OpenAICompatibleClient:
                 last = f"server error {resp.status_code}"
                 time.sleep(2 * (attempt + 1))
                 continue
-            if resp.status_code == 400 and json_mode and "json" in resp.text.lower():
+            if resp.status_code == 400 and "response_format" in body and "json" in resp.text.lower():
                 # Groq returns 400 "json_validate_failed" when the model's
-                # output was not valid JSON; retrying usually succeeds.
+                # output was not valid JSON. Retry; on the final attempt drop
+                # JSON mode altogether and let extract_json() recover the
+                # object from free text (remediation R15: in a live run all
+                # four JSON-mode attempts failed for gpt-oss-20b).
                 last = "provider JSON validation failed"
+                if attempt == self.max_retries - 2:
+                    body.pop("response_format")
                 continue
             if resp.status_code == 404 and "model_not_found" in resp.text and model in self.fallbacks:
                 substitute = self.fallbacks[model]

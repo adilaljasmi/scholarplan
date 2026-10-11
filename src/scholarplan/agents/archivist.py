@@ -216,7 +216,11 @@ class ArchivistAgent(Agent):
 
         for kind in ("report.md", "references.bib", "index.sqlite", "trace.jsonl", "run_summary.json"):
             sb.add_artefact(kind, str(out / kind))
-        sb.log("action", f"wrote report, {len(bib)} BibTeX entries, {n_idx} index vectors and trace to {out}")
+        try:  # log a relative path: absolute paths leak the user's account name into shared traces
+            shown = out.resolve().relative_to(Path.cwd().resolve())
+        except ValueError:
+            shown = Path(out.name)
+        sb.log("action", f"wrote report, {len(bib)} BibTeX entries, {n_idx} index vectors and trace to {shown}")
         sb.set_run_status("done")
         return f"archived to {out}"
 

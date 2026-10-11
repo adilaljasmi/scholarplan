@@ -157,7 +157,13 @@ class ProcessorAgent(Agent):
                             payload=payload, temperature=self.settings.worker_temperature,
                             max_retries=self.settings.llm_max_retries)
         except LLMError as exc:
-            return self._reject(sb, st, "processing_failed", f"Summarisation failed: {exc}")
+            # State the cause explicitly. In a live run the Planner read a bare
+            # "Summarisation failed" as a bad query and rewrote a good one (R15).
+            return self._reject(sb, st, "processing_failed",
+                                f"The Processor model failed to return valid output ({exc}). This is a model "
+                                f"output-format failure, NOT evidence that the query \"{st['query']}\" is "
+                                f"poor: {len(selected)} relevant sources were found. Prefer retrying via "
+                                "alternate_source over rewriting the query.")
 
         valid_ids = {s["id"] for s in selected}
         n_claims = 0

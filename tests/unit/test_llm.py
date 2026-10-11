@@ -118,3 +118,46 @@ def test_live_client_fails_fast_on_auth_error():
 def test_live_client_requires_key():
     with pytest.raises(LLMError, match="GROQ_API_KEY"):
         OpenAICompatibleClient("https://llm.test/v1", "")
+
+
+# --- regression tests for remediation R15 (live run: Processor JSON failures) ---
+def test_repair_prompt_names_the_invalid_field():
+    from scholarplan.llm.base import Usage
+    from scholarplan.llm.schemas import ProcessorOutput
+
+    class Recorder:
+        usage = Usage()
+
+        def __init__(self):
+            self.prompts = []
+
+        def complete(self, **kw):
+            self.prompts.append(kw["user"])
+            return '{"summaries": [{"source_id": "x", "summary": "long enough text"}]}'
+
+    rec = Recorder()
+    with pytest.raises(LLMError):
+        call_json(rec, ProcessorOutput, task="summarise", model="m", system="s", payload={},
+                  temperature=0, max_retries=2)
+    assert "summaries.0.source_id" in rec.prompts[1]  # the repair prompt points at the bad field
+
+
+def test_overlong_summary_is_truncated_not_rejected():
+    from scholarplan.llm.schemas import SourceSummary
+    s = SourceSummary(source_id=1, summary="x" * 5000)
+    assert len(s.summary) == 1200 and s.summary.endswith("...")
+
+
+def test_json_mode_dropped_on_final_attempt(monkeypatch):
+    bodies = []
+
+    def handler(request):
+        body = json.loads(request.content)
+        bodies.append(body)
+        if "response_format" in body:
+            return httpx.Response(400, text='{"error": {"code": "json_validate_failed"}}')
+        return _ok('{"ok": true}')
+
+    c = _client(handler)
+    assert c.complete(task="t", model="openai/gpt-oss-20b", system="s", user="u", temperature=0) == '{"ok": true}'
+    assert "response_format" in bodies[0] and "response_format" not in bodies[-1]

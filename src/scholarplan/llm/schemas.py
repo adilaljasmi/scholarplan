@@ -40,8 +40,15 @@ class ReActOutput(BaseModel):
 
 class SourceSummary(BaseModel):
     source_id: int
-    summary: str = Field(min_length=10, max_length=1200)
+    summary: str = Field(min_length=10)
     claims: list[str] = Field(default_factory=list)
+
+    @field_validator("summary")
+    @classmethod
+    def _truncate(cls, v: str) -> str:
+        # Truncate rather than reject: an over-long summary is a cosmetic
+        # problem, and rejecting it cost a whole re-plan in a live run (R15).
+        return v if len(v) <= 1200 else v[:1197] + "..."
 
     @field_validator("claims")
     @classmethod

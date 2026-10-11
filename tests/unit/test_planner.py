@@ -109,3 +109,9 @@ def test_planner_waits_while_work_in_flight(settings, bb):
     bb.set_run_status("running")
     bb.add_subtask(1, "q", status="retrieving")
     assert PlannerAgent(settings, ScriptedLLM()).can_act(bb) is False
+
+
+def test_clean_query_normalises_typographic_hyphens():
+    """Regression for R16: gpt-oss emitted U+2011 non-breaking hyphens in queries."""
+    from scholarplan.agents.planner import clean_query
+    assert clean_query("retrieval‑augmented  generation–based") == "retrieval-augmented generation-based"

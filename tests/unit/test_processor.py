@@ -97,3 +97,12 @@ def test_processor_rejects_when_nothing_relevant(settings, embedder, bb):
     ProcessorAgent(settings, ScriptedLLM(), embedder).act(bb)
     assert bb.get_subtask(sid)["status"] == "rejected"
     assert bb.feedback()[0]["kind"] == "no_relevant"
+
+
+def test_processing_failure_feedback_states_the_cause(settings, embedder, bb):
+    """Regression for R15: the Planner must be told the query was not the problem."""
+    sid, _ = _prepared_board(bb)
+    ProcessorAgent(settings, ScriptedLLM({"summarise": ["not json"] * 3}), embedder).act(bb)
+    msg = bb.feedback()[0]["message"]
+    assert bb.feedback()[0]["kind"] == "processing_failed"
+    assert "NOT evidence that the query" in msg and "alternate_source" in msg

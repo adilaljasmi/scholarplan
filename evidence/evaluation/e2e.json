@@ -1,0 +1,130 @@
+{
+  "run_at": "2026-10-11T19:02:27",
+  "backend": "groq",
+  "runs": [
+    {
+      "goal": "How does verifying LLM outputs against retrieved sources reduce hallucination?",
+      "status": "done",
+      "seconds": 77.4,
+      "run_id": "20261011-190244-ab978e",
+      "steps_used": 8,
+      "step_budget": 20,
+      "replans": 2,
+      "subtasks": {
+        "verified": 4
+      },
+      "sources_retrieved": 90,
+      "duplicates_removed": 9,
+      "claims_total": 8,
+      "claims_supported": 8,
+      "synthesis_status": "verified",
+      "synthesis_attempts": 1,
+      "llm_usage": {
+        "calls": 21,
+        "prompt_tokens": 17293,
+        "completion_tokens": 3409,
+        "by_model": {
+          "openai/gpt-oss-120b": {
+            "calls": 9,
+            "prompt_tokens": 6445,
+            "completion_tokens": 1146
+          },
+          "openai/gpt-oss-20b": {
+            "calls": 7,
+            "prompt_tokens": 7197,
+            "completion_tokens": 1771
+          },
+          "qwen/qwen3.8-27b": {
+            "calls": 5,
+            "prompt_tokens": 3651,
+            "completion_tokens": 492
+          }
+        }
+      }
+    },
+    {
+      "goal": "What coordination mechanisms do multi-agent LLM systems use, and how do blackboard architectures compare?",
+      "status": "done",
+      "seconds": 43.2,
+      "run_id": "20261011-190344-e9e108",
+      "steps_used": 6,
+      "step_budget": 20,
+      "replans": 0,
+      "subtasks": {
+        "verified": 4
+      },
+      "sources_retrieved": 60,
+      "duplicates_removed": 9,
+      "claims_total": 20,
+      "claims_supported": 20,
+      "synthesis_status": "verified",
+      "synthesis_attempts": 1,
+      "llm_usage": {
+        "calls": 16,
+        "prompt_tokens": 19356,
+        "completion_tokens": 3581,
+        "by_model": {
+          "openai/gpt-oss-120b": {
+            "calls": 7,
+            "prompt_tokens": 5424,
+            "completion_tokens": 1172
+          },
+          "openai/gpt-oss-20b": {
+            "calls": 4,
+            "prompt_tokens": 4879,
+            "completion_tokens": 1292
+          },
+          "qwen/qwen3.8-27b": {
+            "calls": 5,
+            "prompt_tokens": 9053,
+            "completion_tokens": 1117
+          }
+        }
+      }
+    },
+    {
+      "goal": "How are tool-using LLM agents evaluated, and what are the main benchmarks?",
+      "status": "done",
+      "seconds": 55.0,
+      "run_id": "20261011-190427-7aacb0",
+      "steps_used": 6,
+      "step_budget": 20,
+      "replans": 0,
+      "subtasks": {
+        "verified": 4
+      },
+      "sources_retrieved": 60,
+      "duplicates_removed": 5,
+      "claims_total": 16,
+      "claims_supported": 16,
+      "synthesis_status": "verified",
+      "synthesis_attempts": 1,
+      "llm_usage": {
+        "calls": 16,
+        "prompt_tokens": 17891,
+        "completion_tokens": 3278,
+        "by_model": {
+          "openai/gpt-oss-120b": {
+            "calls": 7,
+            "prompt_tokens": 5225,
+            "completion_tokens": 1054
+          },
+          "openai/gpt-oss-20b": {
+            "calls": 4,
+            "prompt_tokens": 4733,
+            "completion_tokens": 1281
+          },
+          "qwen/qwen3.8-27b": {
+            "calls": 5,
+            "prompt_tokens": 7933,
+            "completion_tokens": 943
+          }
+        }
+      }
+    }
+  ],
+  "completed_within_budget": "3/3",
+  "mean_steps": 6.7,
+  "critic_pass_rate": 1.0,
+  "mean_seconds": 58.5
+}
