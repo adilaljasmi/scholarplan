@@ -377,7 +377,7 @@ function notesBySlide() {
   // ================================================================ 8  Testing
   s = pres.addSlide({ masterName: "Content Light", sectionTitle: "Evidence" });
   s.addText("Testing, remediation and development progress", { placeholder: "title" });
-  const tstats = [["94", "tests passing"], ["93%", "line coverage"], ["4/4", "live smoke tests"], ["18", "defects remediated"]];
+  const tstats = [["94", "tests passing"], ["93%", "line coverage"], ["4/4", "live smoke tests"], ["19", "defects remediated"]];
   tstats.forEach(([n, l], i) => {
     const x = 0.6 + (i % 2) * 1.95, y = 1.4 + Math.floor(i / 2) * 1.3;
     s.addShape(pres.shapes.ROUNDED_RECTANGLE, { x, y, w: 1.8, h: 1.15, rectRadius: 0.1, fill: { color: C.background2 }, line: { color: C.background2 } });
