@@ -1,0 +1,42 @@
+{
+  "run_id": "20261011-191009-2cb25b",
+  "goal": "What are the strengths and limitations of blackboard architectures for coordinating LLM-based agents?",
+  "llm_backend": "groq",
+  "steps_used": 6,
+  "step_budget": 20,
+  "subtasks": {
+    "verified": 4
+  },
+  "replans": 0,
+  "sources_retrieved": 49,
+  "duplicates_removed": 7,
+  "sources_selected": 12,
+  "claims_total": 19,
+  "claims_supported": 19,
+  "claims_unsupported": 0,
+  "synthesis_attempts": 1,
+  "synthesis_status": "verified",
+  "index_vectors": 30,
+  "llm_usage": {
+    "calls": 18,
+    "prompt_tokens": 22018,
+    "completion_tokens": 5707,
+    "by_model": {
+      "openai/gpt-oss-120b": {
+        "calls": 7,
+        "prompt_tokens": 5457,
+        "completion_tokens": 1135
+      },
+      "openai/gpt-oss-20b": {
+        "calls": 4,
+        "prompt_tokens": 4489,
+        "completion_tokens": 1220
+      },
+      "qwen/qwen3.8-27b": {
+        "calls": 7,
+        "prompt_tokens": 12072,
+        "completion_tokens": 3352
+      }
+    }
+  }
+}

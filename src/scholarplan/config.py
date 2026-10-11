@@ -96,6 +96,12 @@ class Settings:
     # A subtask passes only if at least this share of its claims is entailed.
     min_supported_ratio: float = 0.5
 
+    # --- Demonstration ------------------------------------------------------
+    # When True, the Processor appends one deliberately false claim to the
+    # first subtask. It is clearly labelled in the trace and exists only to
+    # demonstrate, live, that the independent Critic catches hallucinations.
+    demo_inject_fabrication: bool = False
+
     # --- Embeddings ---------------------------------------------------------
     embedding_backend: str = "minilm"  # "minilm" or "hashing" (offline tests)
     embedding_model: str = "sentence-transformers/all-MiniLM-L6-v2"

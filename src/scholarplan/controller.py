@@ -67,8 +67,23 @@ class Controller:
     def start(self, goal: str) -> str:
         run_id = self.bb.create_run(goal.strip(), self.settings.step_budget, self.settings.llm_backend)
         self.bb.log("system", "event", f"run started: \"{goal.strip()}\"",
-                    {"settings": {k: str(v) for k, v in vars(self.settings).items() if k != "groq_api_key"}})
+                    {"settings": self._public_settings()})
         return run_id
+
+    def _public_settings(self) -> dict[str, str]:
+        """Settings snapshot for the trace: never the API key, and paths made
+        relative so shared traces do not reveal the user's account (R18)."""
+        out = {}
+        for k, v in vars(self.settings).items():
+            if k == "groq_api_key":
+                continue
+            if isinstance(v, Path):
+                try:
+                    v = v.resolve().relative_to(Path.cwd().resolve())
+                except ValueError:
+                    v = v.name
+            out[k] = str(v)
+        return out
 
     def step(self) -> tuple[str, str] | None:
         """Run one applicable agent. Returns (role, description) or None if idle."""

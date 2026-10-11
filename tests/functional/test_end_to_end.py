@@ -214,3 +214,14 @@ def test_saved_index_supports_later_semantic_search(settings, fake_clients):
     _, res = run(settings, ScriptedLLM({"plan": [plan("react agents")]}), fake_clients)
     hits = search_index(res.output_dir / "index.sqlite", "reasoning and acting agents", HashingEmbedder(), k=3)
     assert hits and hits[0]["citation"].startswith("(")
+
+
+def test_demo_fabrication_is_labelled_and_rejected(settings, fake_clients):
+    """The demo switch must plant exactly one labelled false claim, and the Critic must reject it."""
+    demo = settings.with_overrides(demo_inject_fabrication=True)
+    ctl, res = run(demo, ScriptedLLM({"plan": [plan("react agents")]}), fake_clients)
+    assert res.status == "done"
+    assert any(t["content"].startswith("[DEMO]") for t in ctl.bb.trace())
+    rejected = [c["text"] for c in ctl.bb.claims(status="unsupported")]
+    assert any("99%" in r for r in rejected)
+    assert "99%" not in (res.output_dir / "report.md").read_text(encoding="utf-8")

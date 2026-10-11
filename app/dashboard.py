@@ -31,7 +31,11 @@ sys.path.insert(0, str(ROOT / "src"))
 from scholarplan.blackboard import Blackboard  # noqa: E402
 from scholarplan.config import load_settings  # noqa: E402
 
-OUTPUT = ROOT / "output" / "ui"
+# ?db=ui|eval|evidence selects which run store to show (whitelisted, never a
+# free path, so a URL cannot make the app read arbitrary files).
+_STORES = ("ui", "eval", "evidence", "dev", "live")
+_store = st.query_params.get("db", "ui")
+OUTPUT = ROOT / "output" / (_store if _store in _STORES else "ui")
 DB = OUTPUT / "blackboard.db"
 
 AGENTS = {
@@ -48,7 +52,13 @@ STATUS_COLOUR = {"verified": "🟢", "rejected": "🔴", "abandoned": "⚫", "un
                  "open": "🔵", "retrieving": "🔵", "retrieved": "🔵", "processing": "🟣", "processed": "🟣",
                  "verifying": "🟠"}
 
-st.set_page_config(page_title="ScholarPlan", page_icon="🧭", layout="wide")
+# Deep links: ?run=<run_id>&tab=<trace|subtasks|sources|claims|feedback|report|metrics>
+# open one view directly, which is useful when presenting a specific run.
+QP = st.query_params
+st.set_page_config(page_title="ScholarPlan", page_icon="🧭", layout="wide",
+                   initial_sidebar_state="collapsed" if "tab" in QP else "auto")
+if "run" in QP and "run_id" not in st.session_state:
+    st.session_state.run_id = QP["run"]
 st.markdown("""
 <style>
 .agent-card {border-radius:10px;padding:10px 12px;border:2px solid #e5e7eb;text-align:center;min-height:92px}
@@ -62,10 +72,10 @@ st.markdown("""
 
 
 # --------------------------------------------------------------- run control
-def start_run(goal: str, backend: str, budget: int, max_subtasks: int) -> None:
+def start_run(goal: str, backend: str, budget: int, max_subtasks: int, inject: bool = False) -> None:
     from scholarplan.controller import Controller
     settings = load_settings(llm_backend=backend, step_budget=budget, max_subtasks=max_subtasks,
-                             output_dir=OUTPUT)
+                             output_dir=OUTPUT, demo_inject_fabrication=inject)
     ctl = Controller(settings, db_path=DB)
     run_id = ctl.start(goal)
     st.session_state.run_id = run_id
@@ -104,10 +114,12 @@ with st.sidebar:
         st.warning("No GROQ_API_KEY found in .env; use mock.")
     budget = st.slider("ReAct step budget", 5, 30, settings0.step_budget)
     max_sub = st.slider("Max subtasks", 1, 6, settings0.max_subtasks)
+    inject = st.toggle("Demo: inject a fabricated claim", value=False,
+                       help="Plants one false claim in subtask 1 to show the Critic rejecting it live.")
     c1, c2 = st.columns(2)
     if c1.button("▶ Run agents", type="primary", disabled=is_running() or not goal.strip()
                  or (backend == "groq" and not has_key), use_container_width=True):
-        start_run(goal, backend, budget, max_sub)
+        start_run(goal, backend, budget, max_sub, inject)
     if c2.button("■ Stop", disabled=not is_running(), use_container_width=True):
         st.session_state.controller.stop_event.set()
 
@@ -194,7 +206,8 @@ def claims_view(bb: Blackboard) -> None:
                 "the report.")
     for c in claims:
         mark = {"supported": "✅", "unsupported": "❌", "pending": "⏳"}[c["status"]]
-        with st.expander(f"{mark} C{c['id']}: {c['text'][:140]}"):
+        expanded = QP.get("tab") == "claims" and c["status"] == "unsupported"
+        with st.expander(f"{mark} C{c['id']}: {c['text'][:140]}", expanded=expanded):
             v = verdicts.get(c["id"])
             st.markdown(f"**Critic:** {v['reason'] if v else 'pending'}")
             s = sources.get(c["source_id"])
@@ -238,6 +251,20 @@ def usage_view(bb: Blackboard) -> None:
         st.info("Metrics appear when the run is archived.")
 
 
+class _Null:
+    """Context manager that swallows a panel's output (single-view deep links)."""
+
+    def __enter__(self):
+        self._box = st.empty()
+        self._ctx = self._box.container()
+        return self._ctx.__enter__()
+
+    def __exit__(self, *exc):
+        self._ctx.__exit__(*exc)
+        self._box.empty()
+        return False
+
+
 @st.fragment(run_every=1.0)
 def live_panel() -> None:
     run_id = st.session_state.get("run_id")
@@ -271,8 +298,16 @@ def live_panel() -> None:
         st.error(run["note"])
     agent_strip(last[0].get("agent") if running else None)
 
-    tabs = st.tabs(["🧠 ReAct trace", "📋 Subtasks", "📚 Sources", "🛡️ Claims & verdicts",
-                    "🔁 Feedback", "📄 Report", "📈 Metrics"])
+    names = ["trace", "subtasks", "sources", "claims", "feedback", "report", "metrics"]
+    labels = ["🧠 ReAct trace", "📋 Subtasks", "📚 Sources", "🛡️ Claims & verdicts",
+              "🔁 Feedback", "📄 Report", "📈 Metrics"]
+    if QP.get("tab") in names:
+        # Single-view mode for deep links: render only the requested panel.
+        i = names.index(QP["tab"])
+        st.subheader(labels[i])
+        tabs = [st.container() if j == i else _Null() for j in range(len(names))]
+    else:
+        tabs = st.tabs(labels)
     with tabs[0]:
         show = st.multiselect("Show", list(KIND_LABEL), default=list(KIND_LABEL), key="kinds",
                               format_func=KIND_LABEL.get, label_visibility="collapsed")

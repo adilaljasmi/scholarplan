@@ -1,0 +1,13 @@
+============================= test session starts =============================
+platform win32 -- Python 3.11.17, pytest-9.1.1, pluggy-1.6.0 -- .venv\Scripts\python.exe
+rootdir: 
+configfile: pyproject.toml
+plugins: anyio-4.15.1, cov-7.1.0
+collecting ... collected 4 items
+
+tests/live/test_live.py::test_each_api_still_returns_parseable_records[arxiv] PASSED [ 25%]
+tests/live/test_live.py::test_each_api_still_returns_parseable_records[openalex] PASSED [ 50%]
+tests/live/test_live.py::test_each_api_still_returns_parseable_records[crossref] PASSED [ 75%]
+tests/live/test_live.py::test_live_critic_separates_supported_from_fabricated PASSED [100%]
+
+============================= 4 passed in 11.27s ==============================

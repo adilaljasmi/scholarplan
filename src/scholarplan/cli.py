@@ -40,6 +40,8 @@ def cmd_run(args: argparse.Namespace) -> int:
         overrides["output_dir"] = Path(args.out)
     if args.embeddings:
         overrides["embedding_backend"] = args.embeddings
+    if args.inject_fabrication:
+        overrides["demo_inject_fabrication"] = True
     settings = load_settings(**overrides)
     if settings.llm_backend == "groq" and not settings.groq_api_key:
         print("GROQ_API_KEY is not set (see .env.example). Use --llm mock to run offline.", file=sys.stderr)
@@ -98,6 +100,8 @@ def main(argv: list[str] | None = None) -> int:
     r.add_argument("--budget", type=int, default=20, help="ReAct step budget (default 20)")
     r.add_argument("--out", help="output directory (default ./output)")
     r.add_argument("--embeddings", choices=["minilm", "hashing"], help="embedding backend")
+    r.add_argument("--inject-fabrication", action="store_true",
+                   help="demo: plant one false claim to show the Critic rejecting it")
     r.set_defaults(fn=cmd_run)
     s = sub.add_parser("search", help="semantic search over a finished run's vector index")
     s.add_argument("run_dir")

@@ -177,6 +177,15 @@ class ProcessorAgent(Agent):
             for claim in item.claims[: self.settings.max_claims_per_source]:
                 sb.add_claim(st["id"], item.source_id, attempt, claim)
                 n_claims += 1
+        if self.settings.demo_inject_fabrication and st["seq"] == 1 and attempt == 0 and selected:
+            # Demonstration only (see config.demo_inject_fabrication): a
+            # fabricated, over-claiming statement attributed to a real source.
+            fake = (f"This study reports that its method eliminates hallucination entirely and improves "
+                    f"accuracy by 99% on every benchmark.")
+            sb.add_claim(st["id"], selected[0]["id"], attempt, fake)
+            n_claims += 1
+            sb.log("event", f"[DEMO] injected a fabricated claim for source {selected[0]['id']}: \"{fake}\"",
+                   {"subtask_id": st["id"], "demo": True})
         if n_claims == 0:
             return self._reject(sb, st, "no_claims",
                                 f"No claims relevant to \"{st['query']}\" could be extracted from the abstracts.")
