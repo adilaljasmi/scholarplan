@@ -331,6 +331,7 @@ The baseline misses contradictions and metric shifts that reuse the source's wor
 | Test-suite output, JUnit XML, coverage | `evidence/tests/` |
 | Evaluation results (JSON) | `evidence/evaluation/` |
 | Development history | `git log` (sprint-tagged commits) and `docs/REMEDIATION_LOG.md` |
+| Presentation (10 slides, speaker notes) and narration transcript | `presentation/ScholarPlan_Unit11_Presentation.pptx`, `presentation/ScholarPlan_Narration_Transcript.docx` (source: `presentation/TRANSCRIPT.md`) |
 
 ---
 
@@ -376,6 +377,7 @@ scholarplan/
 ├── tests/                  # unit/, functional/, live/, fixtures/ (recorded API responses)
 ├── eval/                   # evaluation harness and labelled benchmarks
 ├── evidence/               # test outputs, evaluation results, run outputs, screenshots
+├── presentation/           # slide deck, narration transcript, deck build scripts
 └── docs/REMEDIATION_LOG.md
 ```
 
