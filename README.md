@@ -6,6 +6,8 @@ It implements the design proposed in the Unit 6 group report *"ScholarPlan: An L
 
 | | |
 |---|---|
+| **Repository** | https://github.com/adilaljasmi/scholarplan |
+| **Author** | Adil Aljasmi · Intelligent Agents, Unit 11 (individual submission) |
 | **Agents** | Planner (deliberative, ReAct), Retriever, Processor, Critic, Archivist (reactive) |
 | **Coordination** | Shared SQLite **blackboard**; agents never call each other |
 | **Models** (Groq free tier) | Planner `gpt-oss-120b` · Processor `gpt-oss-20b` · Critic `qwen3.8-27b` |

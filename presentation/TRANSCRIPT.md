@@ -141,7 +141,7 @@ On legal, social, ethical and professional factors: the system respects each API
 
 To conclude: ScholarPlan implements the Unit 6 design as a working, tested multi-agent system. A deliberative ReAct planner and reactive specialists coordinate through a blackboard, an independent Critic filters hallucinations, and the results are stored offline with full provenance. It meets the measurable targets the design was criticised for lacking, and every change from the plan is documented and justified.
 
-The broader lesson is the LLM-Modulo one: let the language model supply judgement, and let code guarantee validity and termination.
+The broader lesson is the LLM-Modulo one: let the language model supply judgement and let code guarantee validity and termination.
 
 The code, tests, evidence and README with full references are in my GitHub repository. Thank you for listening.
 
