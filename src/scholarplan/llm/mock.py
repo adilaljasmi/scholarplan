@@ -87,7 +87,7 @@ class MockLLM:
         if pending and "issue_subtask" in allowed:
             return {"thought": f"Next uncovered facet is '{pending[0]['query']}'.",
                     "action": "issue_subtask", "subtask_id": pending[0]["id"]}
-        return {"thought": "Coverage is sufficient; synthesise the verified evidence.",
+        return {"thought": "No further subtask is worth pursuing; synthesise the verified evidence.",
                 "action": "synthesise"}
 
     def _synthesise(self, p: dict[str, Any]) -> dict[str, Any]:
@@ -132,8 +132,10 @@ class ScriptedLLM(MockLLM):
     """Mock whose answers can be overridden per task, for testing failure paths.
 
     ``script[task]`` is a list consumed in order; each item is a raw string, a
-    dict (serialised to JSON), or a callable receiving the payload. When a
-    task's list is exhausted the default mock behaviour resumes.
+    dict (serialised to JSON), or a callable receiving the payload. A callable
+    may return None to mean "not applicable to this call": the item is kept
+    for later and the default mock answers instead. When a task's list is
+    exhausted the default mock behaviour resumes.
     """
 
     def __init__(self, script: dict[str, list[Any]] | None = None):
@@ -143,10 +145,12 @@ class ScriptedLLM(MockLLM):
     def complete(self, *, task: str, model: str, system: str, user: str,
                  temperature: float, json_mode: bool = True) -> str:
         if self.script[task]:
-            item = self.script[task].pop(0)
-            self.calls.append({"task": task, "model": model, "scripted": True})
+            item = self.script[task][0]
             if callable(item):
                 item = item(_payload(user))
-            return item if isinstance(item, str) else json.dumps(item)
+            if item is not None:
+                self.script[task].pop(0)
+                self.calls.append({"task": task, "model": model, "scripted": True})
+                return item if isinstance(item, str) else json.dumps(item)
         return super().complete(task=task, model=model, system=system, user=user,
                                 temperature=temperature, json_mode=json_mode)
