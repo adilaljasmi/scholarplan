@@ -78,7 +78,9 @@ class Settings:
     http_timeout_s: float = 20.0
     # arXiv's terms of use ask for no more than one request every 3 seconds.
     arxiv_min_interval_s: float = 3.0
-    api_min_interval_s: float = 0.2
+    # 1 request/s for OpenAlex and Crossref: well inside their published
+    # limits, and slow enough that anonymous (no-mailto) use is not throttled.
+    api_min_interval_s: float = 1.0
 
     # --- Processing (Unit 6 feedback #2: explicit thresholds) ---------------
     # Cosine similarity at or above which two records are treated as the same

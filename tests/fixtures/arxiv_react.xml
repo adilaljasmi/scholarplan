@@ -1,0 +1,94 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<feed xmlns:opensearch="http://a9.com/-/spec/opensearch/1.1/" xmlns:arxiv="http://arxiv.org/schemas/atom" xmlns="http://www.w3.org/2005/Atom">
+  <id>https://arxiv.org/api/yDHE9k9Obdfld96eGjC4DwByTxU</id>
+  <title>arXiv Query: search_query=all:react AND all:reasoning AND all:acting&amp;id_list=&amp;start=0&amp;max_results=3</title>
+  <updated>2026-10-11T14:42:42Z</updated>
+  <link href="https://arxiv.org/api/query?search_query=all:react+AND+(all:reasoning+AND+all:acting)&amp;start=0&amp;max_results=3&amp;id_list=" type="application/atom+xml"/>
+  <opensearch:itemsPerPage>3</opensearch:itemsPerPage>
+  <opensearch:totalResults>73</opensearch:totalResults>
+  <opensearch:startIndex>0</opensearch:startIndex>
+  <entry>
+    <id>http://arxiv.org/abs/2210.03629v3</id>
+    <title>ReAct: Synergizing Reasoning and Acting in Language Models</title>
+    <updated>2023-03-10T01:00:17Z</updated>
+    <link href="https://arxiv.org/abs/2210.03629v3" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2210.03629v3" rel="related" type="application/pdf" title="pdf"/>
+    <summary>While large language models (LLMs) have demonstrated impressive capabilities across tasks in language understanding and interactive decision making, their abilities for reasoning (e.g. chain-of-thought prompting) and acting (e.g. action plan generation) have primarily been studied as separate topics. In this paper, we explore the use of LLMs to generate both reasoning traces and task-specific actions in an interleaved manner, allowing for greater synergy between the two: reasoning traces help the model induce, track, and update action plans as well as handle exceptions, while actions allow it to interface with external sources, such as knowledge bases or environments, to gather additional information. We apply our approach, named ReAct, to a diverse set of language and decision making tasks and demonstrate its effectiveness over state-of-the-art baselines, as well as improved human interpretability and trustworthiness over methods without reasoning or acting components. Concretely, on question answering (HotpotQA) and fact verification (Fever), ReAct overcomes issues of hallucination and error propagation prevalent in chain-of-thought reasoning by interacting with a simple Wikipedia API, and generates human-like task-solving trajectories that are more interpretable than baselines without reasoning traces. On two interactive decision making benchmarks (ALFWorld and WebShop), ReAct outperforms imitation and reinforcement learning methods by an absolute success rate of 34% and 10% respectively, while being prompted with only one or two in-context examples. Project site with code: https://react-lm.github.io</summary>
+    <category term="cs.CL" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <category term="cs.LG" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2022-10-06T01:00:32Z</published>
+    <arxiv:comment>v3 is the ICLR camera ready version with some typos fixed. Project site with code: https://react-lm.github.io</arxiv:comment>
+    <arxiv:primary_category term="cs.CL"/>
+    <author>
+      <name>Shunyu Yao</name>
+    </author>
+    <author>
+      <name>Jeffrey Zhao</name>
+    </author>
+    <author>
+      <name>Dian Yu</name>
+    </author>
+    <author>
+      <name>Nan Du</name>
+    </author>
+    <author>
+      <name>Izhak Shafran</name>
+    </author>
+    <author>
+      <name>Karthik Narasimhan</name>
+    </author>
+    <author>
+      <name>Yuan Cao</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2609.24831v1</id>
+    <title>GRUET: Quantifying Uncertainty of Agentic Reasoning-and-Acting Processes</title>
+    <updated>2026-09-21T16:15:35Z</updated>
+    <link href="https://arxiv.org/abs/2609.24831v1" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2609.24831v1" rel="related" type="application/pdf" title="pdf"/>
+    <summary>Agents have attracted considerably increasing attention due to the power of executing both Reasoning and Acting (ReAct) in open and dynamic environments. The ReAct process typically exhibits a multi-turn trajectory in which one drives Large Language Models (LLMs) to generate both reasoning chains and task-specific actions in an interleaved manner. However, agents often suffer from significant uncertainty, where identical tasks yield divergent trajectories; trajectories with higher uncertainty often produce incomprehensible behaviors, severely undermining agent credibility. This work conjectures that such trajectory-level uncertainty frequently stems from cumulative turn-level reasoning uncertainty induced by LLMs; the latter often exhibits a collection of branches of divergent reasoning chains and their resulting actions. Built upon this, we present the Graph-based Reasoning UncErtainty in Trajectories (GRUET) method for the uncertainty quantification of ReAct, comprising turn-level reasoning uncertainty quantification and trajectory-level uncertainty aggregation; the former precisely quantifies reasoning uncertainty via modeling the reasoning space spanned by potential reasoning branches as a graph and then approximating the reasoning space complexity with graph complexity, while the latter employs simple aggregation strategies for quantifying the overall trajectory credibility. Empirical evaluations across nine LLMs and five benchmarks validate the effectiveness of our proposed GRUET in terms of selective generation performance, measured by AUROC, AUPRC, and AUARC.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2026-09-21T16:15:35Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Shuang Liang</name>
+    </author>
+    <author>
+      <name>Xin-Yu Hu</name>
+    </author>
+    <author>
+      <name>Shao-Qun Zhang</name>
+    </author>
+  </entry>
+  <entry>
+    <id>http://arxiv.org/abs/2505.09970v2</id>
+    <title>Pre-Act: Multi-Step Planning and Reasoning Improves Acting in LLM Agents</title>
+    <updated>2025-05-19T03:17:21Z</updated>
+    <link href="https://arxiv.org/abs/2505.09970v2" rel="alternate" type="text/html"/>
+    <link href="https://arxiv.org/pdf/2505.09970v2" rel="related" type="application/pdf" title="pdf"/>
+    <summary>The ReAct (Reasoning + Action) capability in large language models (LLMs) has become the foundation of modern agentic systems. Recent LLMs, such as DeepSeek-R1 and OpenAI o1/o3, exemplify this by emphasizing reasoning through the generation of ample intermediate tokens, which help build a strong premise before producing the final output tokens. In this paper, we introduce Pre-Act, a novel approach that enhances the agent's performance by creating a multi-step execution plan along with the detailed reasoning for the given user input. This plan incrementally incorporates previous steps and tool outputs, refining itself after each step execution until the final response is obtained. Our approach is applicable to both conversational and non-conversational agents. To measure the performance of task-oriented agents comprehensively, we propose a two-level evaluation framework: (1) turn level and (2) end-to-end. Our turn-level evaluation, averaged across five models, shows that our approach, Pre-Act, outperforms ReAct by 70% in Action Recall on the Almita dataset. While this approach is effective for larger models, smaller models crucial for practical applications, where latency and cost are key constraints, often struggle with complex reasoning tasks required for agentic systems. To address this limitation, we fine-tune relatively small models such as Llama 3.1 (8B &amp; 70B) using the proposed Pre-Act approach. Our experiments show that the fine-tuned 70B model outperforms GPT-4, achieving a 69.5% improvement in action accuracy (turn-level) and a 28% improvement in goal completion rate (end-to-end) on the Almita (out-of-domain) dataset.</summary>
+    <category term="cs.AI" scheme="http://arxiv.org/schemas/atom"/>
+    <published>2025-05-15T05:17:47Z</published>
+    <arxiv:primary_category term="cs.AI"/>
+    <author>
+      <name>Mrinal Rawat</name>
+    </author>
+    <author>
+      <name>Ambuje Gupta</name>
+    </author>
+    <author>
+      <name>Rushil Goomer</name>
+    </author>
+    <author>
+      <name>Alessandro Di Bari</name>
+    </author>
+    <author>
+      <name>Neha Gupta</name>
+    </author>
+    <author>
+      <name>Roberto Pieraccini</name>
+    </author>
+  </entry>
+</feed>

@@ -99,10 +99,16 @@ class ScholarlyHTTP:
                 return text
             except (httpx.HTTPStatusError, httpx.TransportError) as exc:
                 last_exc = exc
-                status = getattr(getattr(exc, "response", None), "status_code", None)
+                response = getattr(exc, "response", None)
+                status = getattr(response, "status_code", None)
                 if status is not None and status < 500 and status != 429:
                     break  # a 4xx other than 429 will not fix itself on retry
-                time.sleep(1.5 * (attempt + 1))
+                # Honour Retry-After when the server sends one (remediation R10:
+                # the first live run hit OpenAlex 429s because a fixed 1.5 s
+                # back-off was shorter than the server's own window).
+                hint = response.headers.get("retry-after", "") if response is not None else ""
+                delay = float(hint) if hint.replace(".", "", 1).isdigit() else 2.0 * 2 ** attempt
+                time.sleep(min(delay, 30.0))
         raise RuntimeError(f"{host_key} request failed: {last_exc}") from last_exc
 
     def get_json(self, host_key: str, url: str, params: dict[str, Any]) -> Any:
